@@ -15,8 +15,12 @@
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\Expense\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Employee\EmptyClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Data\ExpenseContext %28copy%29.cs" />
   </ItemGroup>
 </Project>

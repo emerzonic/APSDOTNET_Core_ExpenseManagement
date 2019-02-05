@@ -42,23 +42,27 @@ button.accept-policy {
     font-size: 1.5rem;
     padding: 1rem;
     width: 100%;
-    margin-top: 1rem;
+    margin: 0.2rem;
 }
 
 .card.status-new {
-    background: red;
+    background: #f5d1d1;
 }
 
 .card.status-review {
-    background: yellow;
+    background: #f1f1b5;
 }
 
 .card.status-paid {
-    background: green;
+    background: #bef5be;
 }
 
 .card.status-canceled {
-    background: gray;
+    background: #cdfdfc;
+}
+
+.expense-card.card {
+    margin: 0.2rem;
 }
 
 .display-4{

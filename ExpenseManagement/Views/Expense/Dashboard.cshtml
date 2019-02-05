@@ -15,11 +15,12 @@
     {
         @if (expense.Status == "New")
         {
-        <div class="card col-md-3 status-new">
+        <div class="card col-md-3 status-new expense-card">
             <div class="card-body">
                 <h5 class="card-title">@expense.Description</h5>
                 <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
                 <p class="card-text">@expense.Comments</p>
+                <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
                 <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
             </div>
         </div>
@@ -35,11 +36,12 @@
     {
         @if (expense.Status == "In Review")
         {
-            <div class="card col-md-3 status-review">
+            <div class="card col-md-3 status-review expense-card">
                 <div class="card-body">
                     <h5 class="card-title">@expense.Description</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
                     <p class="card-text">@expense.Comments</p>
+                    <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
                     <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
                 </div>
             </div>
@@ -54,11 +56,12 @@
     {
         @if (expense.Status == "Paid")
         {
-            <div class="card col-md-3 status-paid">
+            <div class="card col-md-3 status-paid expense-card">
                 <div class="card-body">
                     <h5 class="card-title">@expense.Description</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
                     <p class="card-text">@expense.Comments</p>
+                    <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
                     <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
                 </div>
             </div>
@@ -73,11 +76,12 @@
     {
         @if (expense.Status == "Canceled/Rejected")
         {
-            <div class="card col-md-3 status-canceled">
+            <div class="card col-md-3 status-canceled expense-card">
                 <div class="card-body">
                     <h5 class="card-title">@expense.Description</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
                     <p class="card-text">@expense.Comments</p>
+                    <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
                     <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
                 </div>
             </div>
