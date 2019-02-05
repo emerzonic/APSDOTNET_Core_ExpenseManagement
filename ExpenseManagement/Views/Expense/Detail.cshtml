@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Expense Detail</h1>
+</div>
+<div class="row">
+    <div class="card col-md-8 mx-auto">
+        <div class="card-body">
+            <h5 class="card-title">Travel Expenses</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Feb. 2, 2019 Status: New</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a asp-controller="Expense" asp-action="Edit" class="card-link">Edit</a>
+            <a asp-controller="Expense" asp-action="Cancel" class="card-link">Cancel</a>
+            <a asp-controller="Expense" asp-action="Dashboard" class="card-link">Go to Dashboard</a>
+        </div>
+    </div>
+</div>

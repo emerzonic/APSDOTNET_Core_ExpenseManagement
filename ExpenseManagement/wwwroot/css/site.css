@@ -36,6 +36,34 @@ button.accept-policy {
     line-height: inherit;
 }
 
+.expense-status {
+    color: black;
+    background: white;
+    font-size: 1.5rem;
+    padding: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.card.status-new {
+    background: red;
+}
+
+.card.status-review {
+    background: yellow;
+}
+
+.card.status-paid {
+    background: green;
+}
+
+.card.status-canceled {
+    background: gray;
+}
+
+.display-4{
+    color:white;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -46,6 +74,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+    background:black;
 }
 
 .footer {

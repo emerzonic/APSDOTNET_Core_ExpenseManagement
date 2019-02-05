@@ -1,0 +1,87 @@
+﻿@model List<ExpenseManagement.Models.Expense>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Expense Management Dashboard</h1>
+</div>
+<div class="text-center row">
+    <h1 class="expense-status">New Expenses</h1>
+</div>
+<div class="row">
+    @foreach (var expense in Model)
+    {
+        @if (expense.Status == "New")
+        {
+        <div class="card col-md-3 status-new">
+            <div class="card-body">
+                <h5 class="card-title">@expense.Description</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
+                <p class="card-text">@expense.Comments</p>
+                <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+            </div>
+        </div>
+            }
+        }
+
+</div>
+<div class="text-center row">
+    <h1 class="expense-status">In Review</h1>
+</div>
+<div class="row">
+    @foreach (var expense in Model)
+    {
+        @if (expense.Status == "In Review")
+        {
+            <div class="card col-md-3 status-review">
+                <div class="card-body">
+                    <h5 class="card-title">@expense.Description</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
+                    <p class="card-text">@expense.Comments</p>
+                    <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="text-center row">
+    <h1 class="expense-status">Paid Expenses</h1>
+</div>
+<div class="row">
+    @foreach (var expense in Model)
+    {
+        @if (expense.Status == "Paid")
+        {
+            <div class="card col-md-3 status-paid">
+                <div class="card-body">
+                    <h5 class="card-title">@expense.Description</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
+                    <p class="card-text">@expense.Comments</p>
+                    <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="text-center row">
+    <h1 class="expense-status">Canceled/Rejected Expenses</h1>
+</div>
+<div class="row">
+    @foreach (var expense in Model)
+    {
+        @if (expense.Status == "Canceled/Rejected")
+        {
+            <div class="card col-md-3 status-canceled">
+                <div class="card-body">
+                    <h5 class="card-title">@expense.Description</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
+                    <p class="card-text">@expense.Comments</p>
+                    <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+

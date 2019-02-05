@@ -14,5 +14,9 @@
   <ItemGroup>
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\Expense\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Views\Employee\EmptyClass.cs" />
   </ItemGroup>
 </Project>

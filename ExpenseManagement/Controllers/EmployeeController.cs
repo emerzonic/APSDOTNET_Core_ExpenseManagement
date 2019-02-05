@@ -11,7 +11,23 @@ namespace ExpenseManagement.Controllers
     public class EmployeeController : Controller
     {
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult SignupForm()
+        {
+            return View();
+        }
+
+        public IActionResult Signup()
+        {
+            return View();
+        }
+
+        // GET: /<controller>/
+        public IActionResult SigninForm()
+        {
+            return View();
+        }
+
+        public IActionResult Signin()
         {
             return View();
         }

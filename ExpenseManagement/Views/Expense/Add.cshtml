@@ -1,0 +1,43 @@
+﻿@model ExpenseManagement.ViewModels.AddExpenseViewModel
+@{
+    ViewData["Title"] = "New Expense";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Add New Expense</h1>
+</div>
+<div class="row">
+    <div class="card col-md-6 mx-auto">
+        <div class="card-body">
+            <form asp-controller="Expense" asp-action="Add" method="post">
+                <div class="form-group">
+                    <label asp-for="Date">Date</label>
+                    <input asp-for="Date" type="date" class="form-control" placeholder="Enter date">
+                    <span asp-validation-for="Date" class="form-text text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description">Description</label>
+                    <input asp-for="Description" type="text" class="form-control"  placeholder="Enter description">
+                    <span asp-validation-for="Description" class="form-text text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Amount">Amount</label>
+                    <input asp-for="Amount" type="text" class="form-control" placeholder="Enter amount">
+                    <span asp-validation-for="Amount" class="form-text text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Comments">Comments</label>
+                    <textarea asp-for="Comments" type="text" class="form-control" placeholder="Enter comments"></textarea>
+                    <span asp-validation-for="Comments" class="form-text text-danger"></span>
+                </div>
+                <div class="form-group custom-file">
+                    <input asp-for="Receipt" type="file" class="form-control custom-file-input">
+                    <label asp-for="Receipt" class="custom-file-label">Choose file</label>
+                    <span asp-validation-for="Receipt" class="form-text text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary my-3">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
