@@ -7,7 +7,7 @@ namespace ExpenseManagement.Models
        public string Description { get; set; }
        public Decimal Amount { get; set; }
        public DateTime Date { get; set; }
-       public Employee Employee { get; set; }
+       public int EmployeeId { get; set; }
        public string Status { get; set; }
        public string Comments { get; set; }
        public string Receipt { get; set; }

@@ -1,5 +1,4 @@
-﻿using System;
-using ExpenseManagement.Models;
+﻿using ExpenseManagement.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Data
@@ -13,6 +12,12 @@ namespace ExpenseManagement.Data
             DbContextOptions<ExpenseMangtDbContext> options
             ):base (options)
         {
+        }
+
+        protected override void OnConfiguring(
+            DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseMySQL("server=localhost;port=8889;database=expenseMangtDB;user=root;password=root");
         }
     }
 }

@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Description">Description</label>
-                    <input asp-for="Description" type="text" class="form-control"  placeholder="Enter description">
+                    <input asp-for="Description" type="text" class="form-control" placeholder="Enter description">
                     <span asp-validation-for="Description" class="form-text text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -35,6 +35,7 @@
                     <label asp-for="Receipt" class="custom-file-label">Choose file</label>
                     <span asp-validation-for="Receipt" class="form-text text-danger"></span>
                 </div>
+                <a href="/Expense/Dashboard" class="btn btn-primary my-3">Cancel</a>
                 <button type="submit" class="btn btn-primary my-3">Submit</button>
             </form>
         </div>

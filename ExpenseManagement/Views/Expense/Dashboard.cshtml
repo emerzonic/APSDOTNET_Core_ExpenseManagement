@@ -15,17 +15,17 @@
     {
         @if (expense.Status == "New")
         {
-        <div class="card col-md-3 status-new expense-card">
-            <div class="card-body">
-                <h5 class="card-title">@expense.Description</h5>
-                <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
-                <p class="card-text">@expense.Comments</p>
-                <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
-                <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+            <div class="card col-md-3 status-new expense-card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@expense.Description</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
+                    <p class="card-text text-truncate">@expense.Comments</p>
+                    <p class="card-text">@expense.EmployeeId @expense.EmployeeId</p>
+                    <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
+                </div>
             </div>
-        </div>
-            }
         }
+    }
 
 </div>
 <div class="text-center row">
@@ -40,9 +40,29 @@
                 <div class="card-body">
                     <h5 class="card-title">@expense.Description</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
-                    <p class="card-text">@expense.Comments</p>
-                    <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
-                    <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+                    <p class="card-text text-truncate">@expense.Comments</p>
+                    <p class="card-text">@expense.EmployeeId @expense.EmployeeId</p>
+                    <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="text-center row">
+    <h1 class="expense-status">Approved - Pending payment</h1>
+</div>
+<div class="row">
+    @foreach (var expense in Model)
+    {
+        @if (expense.Status == "Approved")
+        {
+            <div class="card col-md-3 status-approved expense-card">
+                <div class="card-body">
+                    <h5 class="card-title">@expense.Description</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
+                    <p class="card-text text-truncate">@expense.Comments</p>
+                    <p class="card-text">@expense.EmployeeId @expense.EmployeeId</p>
+                    <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                 </div>
             </div>
         }
@@ -60,32 +80,33 @@
                 <div class="card-body">
                     <h5 class="card-title">@expense.Description</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
-                    <p class="card-text">@expense.Comments</p>
-                    <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
-                    <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+                    <p class="card-text text-truncate">@expense.Comments</p>
+                    <p class="card-text">@expense.EmployeeId @expense.EmployeeId</p>
+                    <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                 </div>
             </div>
         }
     }
 </div>
 <div class="text-center row">
-    <h1 class="expense-status">Canceled/Rejected Expenses</h1>
+    <h1 class="expense-status">Rejected Expenses</h1>
 </div>
 <div class="row">
     @foreach (var expense in Model)
     {
-        @if (expense.Status == "Canceled/Rejected")
+        @if (expense.Status == "Rejected")
         {
-            <div class="card col-md-3 status-canceled expense-card">
+            <div class="card col-md-3 status-rejected expense-card">
                 <div class="card-body">
                     <h5 class="card-title">@expense.Description</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@expense.Date</h6>
-                    <p class="card-text">@expense.Comments</p>
-                    <p class="card-text">@expense.Employee.FirstName @expense.Employee.LastName</p>
-                    <a asp-controller="Expense" asp-action="Detail" class="card-link">See Detail</a>
+                    <p class="card-text text-truncate">@expense.Comments</p>
+                    <p class="card-text">@expense.EmployeeId @expense.EmployeeId</p>
+                    <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                 </div>
             </div>
         }
     }
 </div>
+
 

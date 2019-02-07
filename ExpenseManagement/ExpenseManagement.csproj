@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.15" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,9 +19,7 @@
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Views\Employee\EmptyClass.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Data\ExpenseContext %28copy%29.cs" />
+    <None Remove="Data\ExpenseDBContextcs" />
   </ItemGroup>
 </Project>

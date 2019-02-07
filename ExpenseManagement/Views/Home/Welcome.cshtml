@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Employee Expense Management</h1>
+</div>
+<div class="row">
+    <div class="card col-md-6">
+        <img src="https://www.zoho.com/expense/expense-reporting/images/what-is-ze.png" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">New Expense</h5>
+            <p class="card-text">Expenses should be submitted within a week of occurance.</p>
+            <a asp-controller="Expense" asp-action="Add" class="btn btn-primary col-12">Submit New Expense</a>
+        </div>
+    </div>
+    <div class="card col-md-6">
+        <img src="https://cdn1.iconfinder.com/data/icons/pixel-perfect-1/512/33-dashboard-chart-report-annual-512.png" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Your Expenses</h5>
+            <p class="card-text">Expenses should be submitted within a week of occurance.</p>
+            <a asp-controller="Expense" asp-action="Dashboard" class="btn btn-primary col-12">Dashboard</a>
+        </div>
+    </div>
+</div>
+

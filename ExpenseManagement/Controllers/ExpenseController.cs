@@ -2,23 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ExpenseManagement.Data;
 using ExpenseManagement.Models;
 using ExpenseManagement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Controllers
 {
     public class ExpenseController : Controller
     {
-        static private List<Expense> Expenses = new List<Expense>();
-        static private ArrayList Statuses = new ArrayList();
-        static Random rnd = new Random();
+        private ExpenseMangtDbContext context;
+        public ExpenseController(ExpenseMangtDbContext dbContext)
+        {
+            context = dbContext;
+        }
 
+
+        [HttpGet]
         public IActionResult Dashboard()
         {
-            return View(Expenses);
+            List<Expense> expenses = context.Expenses.ToList();
+            return View(expenses);
         }
+
+
 
         [HttpGet]
         public IActionResult Add()
@@ -32,54 +40,203 @@ namespace ExpenseManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                Statuses.Add("New");
-                Statuses.Add("Paid");
-                Statuses.Add("In Review");
-                Statuses.Add("Canceled/Rejected");
-                int r = rnd.Next(Statuses.Count);
-                Expense newExpense = new Expense
+                try
                 {
-                    Description = addExpense.Description,
-                    Amount = addExpense.Amount,
-                    Date = addExpense.Date,
-                    Comments = addExpense.Comments,
-                    Receipt = addExpense.Receipt,
-                    Status = Statuses[r].ToString(),
-                    Employee = new Employee
+                    Expense newExpense = new Expense
                     {
-                        FirstName = "Emerson",
-                        LastName = "Doyah",
-                        UserName = "emerzonic",
-                        Role = new Role
-                        {
-                            Name = "Employee"
-                        }
-                    }
+                        Description = addExpense.Description,
+                        Amount = addExpense.Amount,
+                        Date = addExpense.Date,
+                        Comments = addExpense.Comments,
+                        Receipt = addExpense.Receipt,
+                        Status = "New",
+                        EmployeeId = 1
+                    };
+                    context.Add(newExpense);
+                    context.SaveChanges();
 
-                };
-
-                Expenses.Add(newExpense);
-                return Redirect("/Expense/Dashboard");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                } 
+                    return Redirect("/Expense/Dashboard");
             }
             return View(addExpense);
         }
 
+
+
         [HttpGet]
-        [Route("/Detail/{id}")]
+        [Route("/Expense/Detail/{id}")]
         public IActionResult Detail(int id)
         {
-            return View();
+            Expense expense = null;
+            try
+            {
+                expense =  context.Expenses.Single(e => e.ID == id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return View(expense);
         }
 
 
-        public IActionResult Edit()
+
+
+        [HttpGet]
+        [Route("/Expense/Edit/{id}")]
+        public IActionResult Edit(int id)
         {
-            return View();
+            Expense expense = null;
+            try
+            {
+                expense = context.Expenses.Single(e => e.ID == id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            UpdateExpenseViewModel updateExpense = new UpdateExpenseViewModel {
+                Description = expense.Description,
+                Amount = expense.Amount,
+                Date = expense.Date,
+                Comments = expense.Comments,
+                Receipt = expense.Receipt,
+                Status = expense.Status,
+                ID = expense.ID
+            };
+            return View(updateExpense);
         }
 
-        public IActionResult Cancel()
+
+        [HttpPost]
+        public IActionResult Edit(UpdateExpenseViewModel updatedExpense)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Expense expense = null;
+                try
+                {
+                    expense = context.Expenses.Single(e => e.ID == updatedExpense.ID);
+                    expense.Description = updatedExpense.Description;
+                    expense.Amount = updatedExpense.Amount;
+                    expense.Date = updatedExpense.Date;
+                    expense.Comments = updatedExpense.Comments;
+                    expense.Receipt = updatedExpense.Receipt;
+                    context.Entry(expense).State = EntityState.Modified;
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                return Redirect("/Expense/Detail/"+ expense.ID);
+            }
+            return View(updatedExpense);
+        }
+
+
+
+
+        [HttpGet]
+        [Route("/Expense/Delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+               Expense expense = context.Expenses.Single(e => e.ID == id);
+               context.Remove(expense);
+               context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Redirect("/Expense/Dashboard");
+        }
+
+
+        [HttpGet]
+        [Route("/Expense/Review/{id}")]
+        public IActionResult Review(int id)
+        {
+            Expense expense = null;
+            try
+            {
+                expense = context.Expenses.Single(e => e.ID == id);
+                expense.Status = "In Review";
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Redirect("/Expense/Detail/" + expense.ID);
+        }
+
+        [HttpGet]
+        [Route("/Expense/Approve/{id}")]
+        public IActionResult Approve(int id)
+        {
+            Expense expense = null;
+            try
+            {
+                expense = context.Expenses.Single(e => e.ID == id);
+                expense.Status = "Approved";
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Redirect("/Expense/Detail/"+ expense.ID);
+        }
+
+        [HttpGet]
+        [Route("/Expense/Reject/{id}")]
+        public IActionResult Reject(int id)
+        {
+            Expense expense = null;
+            try
+            {
+                expense = context.Expenses.Single(e => e.ID == id);
+                expense.Status = "Rejected";
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Redirect("/Expense/Detail/" + expense.ID);
+        }
+
+
+
+        [HttpGet]
+        [Route("/Expense/Payment/{id}")]
+        public IActionResult Pay(int id)
+        {
+            Expense expense = null;
+            try
+            {
+                expense = context.Expenses.Single(e => e.ID == id);
+                expense.Status = "Paid";
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Redirect("/Expense/Detail/" + expense.ID);
         }
     }
 }

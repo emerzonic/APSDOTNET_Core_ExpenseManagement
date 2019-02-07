@@ -1,41 +1,47 @@
-﻿@{
+﻿@model ExpenseManagement.ViewModels.UpdateExpenseViewModel
+@{
     ViewData["Title"] = "New Expense";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Edit Expense</h1>
+    <h1 class="display-4">Add New Expense</h1>
 </div>
-
+<div asp-validation-summary="All"></div>
 <div class="row">
     <div class="card col-md-6 mx-auto">
         <div class="card-body">
-            <form>
+            <form asp-controller="Expense" asp-action="Edit" method="post">
                 <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" class="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter date">
-                    <small id="dateHelp" class="form-text text-muted">Date should not be a future date.</small>
+                    <label asp-for="Date">Date</label>
+                    <input asp-for="Date" value="@Model.Date" type="text" class="form-control">
+                    <span asp-validation-for="Date" class="form-text text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" class="form-control" id="description" aria-describedby="descriptionHelp" placeholder="Enter description">
-                    <small id="descriptionHelp" class="form-text text-muted"></small>
+                    <label asp-for="Description">Description</label>
+                    <input asp-for="Description" value="@Model.Description." type="text" class="form-control" placeholder="Enter description">
+                    <span asp-validation-for="Description" class="form-text text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="amount">Amount</label>
-                    <input type="text" class="form-control" id="amount" aria-describedby="amountHelp" placeholder="Enter amount">
-                    <small id="amountHelp" class="form-text text-muted"></small>
+                    <label asp-for="Amount">Amount</label>
+                    <input asp-for="Amount" value="@Model.Amount" type="text" class="form-control" placeholder="Enter amount">
+                    <span asp-validation-for="Amount" class="form-text text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="comments">Comments</label>
-                    <textarea type="text" class="form-control" id="comments" aria-describedby="commentsHelp" placeholder="Enter comments"></textarea>
-                    <small id="commentsHelp" class="form-text text-muted"></small>
+                    <label asp-for="Comments">Comments</label>
+                    <textarea asp-for="Comments" value="@Model.Comments" type="text" class="form-control" placeholder="Enter comments"></textarea>
+                    <span asp-validation-for="Comments" class="form-text text-danger"></span>
                 </div>
                 <div class="form-group custom-file">
-                    <input type="file" class="form-control custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input asp-for="Receipt" value="@Model.Receipt" type="file" class="form-control custom-file-input">
+                    <label asp-for="Receipt" class="custom-file-label">Choose file</label>
+                    <span asp-validation-for="Receipt" class="form-text text-danger"></span>
                 </div>
+                <input asp-for="ID" type="hidden">
+                <input asp-for="Status" type="hidden">
 
                 <button type="submit" class="btn btn-primary my-3">Submit</button>
+                <a href="/Expense/Detail/@Model.ID" class="btn btn-primary my-3">Cancel</a>
+
             </form>
         </div>
     </div>
