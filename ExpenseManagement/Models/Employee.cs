@@ -1,18 +1,16 @@
-﻿namespace ExpenseManagement.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace ExpenseManagement.Models
 {
-    public class Employee
+    public class Employee: ApplicationUser
     {
-        public int ID { get; set; }
+        //public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
 
-        public Employee()
-        {
-        
-        }
+        public Employee() { }
 
     }
 }

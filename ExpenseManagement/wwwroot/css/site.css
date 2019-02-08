@@ -36,6 +36,24 @@ button.accept-policy {
     line-height: inherit;
 }
 
+.btn{
+    background:black;
+    border-color:black;
+}
+
+.btn-primary:hover {
+    background: black;
+    border-color: black;
+}
+
+.btn-primary:active:focus {
+        background: black;
+        border-color: black;
+        box-shadow:none;
+    }
+
+
+
 /*Expenses styles
 -------------------------------------------------- */
 

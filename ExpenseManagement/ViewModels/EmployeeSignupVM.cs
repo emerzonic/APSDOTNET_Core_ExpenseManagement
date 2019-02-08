@@ -9,12 +9,13 @@ namespace ExpenseManagement.ViewModels
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
-        public string PasswordConfirmation { get; set; }
         public string AccessCode { get; set; }
 
-        public EmployeeSignupVM()
+        public EmployeeSignupVM(){}
+
+        public string SetEmployeeRole()
         {
+            return AccessCode == "123" ? "ADMIN" : "Employee";
         }
     }
 }

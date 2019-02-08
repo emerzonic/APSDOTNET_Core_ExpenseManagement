@@ -1,69 +1,123 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using ExpenseManagement.Models;
-using ExpenseManagement.ViewModels;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿    using System;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using ExpenseManagement.Data;
+    using ExpenseManagement.Models;
+    using ExpenseManagement.ViewModels;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ExpenseManagement.Controllers
-{
-    public class EmployeeController : Controller
+    namespace ExpenseManagement.Controllers
     {
-        // GET: /<controller>/
-        public IActionResult SignupForm()
-        {
-            EmployeeSignupVM signupVM = new EmployeeSignupVM();
-            return View(signupVM);
-        }
-
-        public IActionResult Signup()
-        {
-            return View();
-        }
-        
-
-        // GET: /<controller>/
-        public IActionResult LoginForm()
-        {
-            EmployeeLoginVM loginVM = new EmployeeLoginVM();
-            return View(loginVM);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> Login(Employee employee)
-        {
-            if (string.IsNullOrEmpty(employee.Email))
+        public class EmployeeController : Controller
             {
-                return RedirectToAction(nameof(Login));
+                private ExpenseMangtDbContext context;
+        private UserManager<ApplicationUser> manager;
+                public EmployeeController(ExpenseMangtDbContext dbContext,
+                 UserManager<ApplicationUser> userManager)
+                {
+                    context = dbContext;
+                    manager = userManager;
+                }
+
+
+                [HttpGet]
+                public IActionResult Signup()
+                {
+                    var signupVM = new EmployeeSignupVM();
+                    return View(signupVM);
+                }
+
+
+
+                [HttpPost]
+                public async Task<IActionResult> Signup(EmployeeSignupVM formData)
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return View(formData);
+                    }
+
+                    try
+                        {
+                            var employee = new Employee
+                            {   UserName = formData.Email,
+                                FirstName = formData.FirstName,
+                                LastName = formData.LastName,
+                                Role = formData.SetEmployeeRole()
+                            };
+               
+                            var result = await manager.CreateAsync(employee, formData.Password);
+                //context.Add(employee);
+                //context.SaveChanges();
+               // if (result.Succeeded)
+               // {
+               //    bool test = true;
+               //}
             }
-
-            var identity = new ClaimsIdentity(new[]
+            catch (Exception ex)
             {
-            new Claim(ClaimTypes.Name, employee.Email),
-            }, CookieAuthenticationDefaults.AuthenticationScheme);
+                Console.WriteLine(ex.Message);}
 
-            var principal = new ClaimsPrincipal(identity);
+                        return RedirectToAction(nameof(Login));
+                }
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, principal
-            );
-            return Redirect("/Home/Welcome");
+
+                [HttpGet]
+                public IActionResult Login()
+                {
+                    var loginVM = new EmployeeLoginVM();
+                    return View(loginVM);
+                }
+
+
+
+                [HttpPost]
+                public async Task<IActionResult> Login(EmployeeLoginVM employeeLoginVM)
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return View(employeeLoginVM);
+                    }
+                try
+                {
+                    var employee = new Employee
+                    {
+                        Email = employeeLoginVM.Email,
+                        Password = employeeLoginVM.Password
+                    };
+
+                    var identity = new ClaimsIdentity(new[]
+                    {
+                    new Claim(ClaimTypes.Name, employee.Email),
+                    }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme, principal
+                    );
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                    return Redirect("/Home/Welcome");
+                }
+
+            
+
+                [HttpGet]
+                [Route("/employee/logout")]
+                public async Task<IActionResult> Logout()
+                {
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    return Redirect("/");
+                }
+            }
         }
-
-
-
-        [HttpGet]
-        [Route("/employee/logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("/");
-        }
-
-
-    }
-}
