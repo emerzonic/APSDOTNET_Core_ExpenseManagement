@@ -8,24 +8,23 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.15" />
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1" />
     <PackageReference Include="Microsoft.NETCore.DotNetHost" Version="1.1.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Employee\" />
+    <Folder Include="Views\User\" />
     <Folder Include="Views\Expense\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Data\" />
+    <Folder Include="Service\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Data\ExpenseContext %28copy%29.cs" />
     <None Remove="Data\ExpenseDBContextcs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Data\CustomUserManager.cs" />
   </ItemGroup>
 </Project>

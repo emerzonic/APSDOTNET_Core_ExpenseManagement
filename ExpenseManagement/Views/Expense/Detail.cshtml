@@ -17,17 +17,17 @@
     {
         <a href="/Expense/Edit/@Model.ID" class="card-link">Edit</a>
         <a href="/Expense/Delete/@Model.ID" class="card-link">Delete Expense</a>
-        <a href="/Expense/Review/@Model.ID" class="card-link">Mark as In Review</a>
+        <a href="/Expense/UpdateStatus/Review/@Model.ID" class="card-link">Mark as In Review</a>
 
 }
             @if (Model.Status == "In Review")
     {
         <a href="/Expense/Approve/@Model.ID" class="card-link">Approved Expense</a>
-        <a href="/Expense/Reject/@Model.ID" class="card-link">Reject Expense</a>
+        <a href="/Expense/UpdateStatus/Reject/@Model.ID" class="card-link">Reject Expense</a>
 }
             @if (Model.Status == "Approved")
     {
-        <a href="/Expense/Payment/@Model.ID" class="card-link">Mark as Paid</a>
+        <a href="/Expense/UpdateStatus/Payment/@Model.ID" class="card-link">Mark as Paid</a>
 }
             <a asp-controller="Expense" asp-action="Dashboard" class="card-link">Go to Dashboard</a>
         </div>

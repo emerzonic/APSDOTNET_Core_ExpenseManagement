@@ -1,10 +1,32 @@
-﻿namespace ExpenseManagement.Models
-{
-    public class Role: ApplicationUserRole
-    {
-        public string ID { get; set; }
+﻿using Microsoft.AspNetCore.Identity;
 
-        public Role(){}
+namespace ExpenseManagement.Models
+{
+    public class Role: IdentityRole
+    {
+        public Role(string name){
+            Name = SetUserRole(name);
+    }
+
+        public string SetUserRole(string accessCode)
+        {
+            string userRole = "";
+            switch (accessCode)
+            {
+                case "123":
+                    userRole = "ADMIN";
+                    break;
+                case "456":
+                    userRole = "MANAGER";
+                    break;
+                default:
+                    userRole = "EMPLOYEE";
+                    break;
+            }
+            return userRole;
+        }
+
+
     }
 
    

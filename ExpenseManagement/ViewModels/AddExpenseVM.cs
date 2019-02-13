@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExpenseManagement.ViewModels
 {
-    public class AddExpenseViewModel
+    public class AddExpenseVM
     {   
         [Required]
         public string Description { get; set; }

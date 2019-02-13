@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseManagement.ViewModels
 {
-    public class UpdateExpenseViewModel : AddExpenseViewModel
+    public class UpdateExpenseVM : Expense
     {
-        public string Status { get; set; }
-        [Required]
-        public int ID { get; set; }
+        //public string Status { get; set; }
+        //[Required]
+        //public int ID { get; set; }
       
-        public UpdateExpenseViewModel()
+        public UpdateExpenseVM()
         {
 
         }

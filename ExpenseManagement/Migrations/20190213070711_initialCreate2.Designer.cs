@@ -9,30 +9,29 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseManagement.Migrations
 {
     [DbContext(typeof(ExpenseMangtDbContext))]
-    [Migration("20190207233311_initialCreate")]
-    partial class initialCreate
+    [Migration("20190213070711_initialCreate2")]
+    partial class initialCreate2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ExpenseManagement.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128);
 
                     b.Property<int>("AccessFailedCount");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Email")
-                        .HasMaxLength(255);
+                        .HasMaxLength(128);
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -41,10 +40,10 @@ namespace ExpenseManagement.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(255);
+                        .HasMaxLength(128);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(255);
+                        .HasMaxLength(128);
 
                     b.Property<string>("PasswordHash");
 
@@ -57,7 +56,7 @@ namespace ExpenseManagement.Migrations
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(255);
+                        .HasMaxLength(128);
 
                     b.HasKey("Id");
 
@@ -69,8 +68,26 @@ namespace ExpenseManagement.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
+            modelBuilder.Entity("ExpenseManagement.Models.Comment", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DateString");
+
+                    b.Property<int?>("ExpenseID");
+
+                    b.Property<string>("Text");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ExpenseID");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ExpenseManagement.Models.Expense", b =>
@@ -81,17 +98,15 @@ namespace ExpenseManagement.Migrations
 
                     b.Property<decimal>("Amount");
 
-                    b.Property<string>("Comments");
-
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("EmployeeId");
-
                     b.Property<string>("Receipt");
 
                     b.Property<string>("Status");
+
+                    b.Property<int>("UserId");
 
                     b.HasKey("ID");
 
@@ -101,16 +116,17 @@ namespace ExpenseManagement.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
                     b.Property<string>("Name")
-                        .HasMaxLength(255);
+                        .HasMaxLength(128);
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(255);
+                        .HasMaxLength(128);
 
                     b.HasKey("Id");
 
@@ -209,19 +225,11 @@ namespace ExpenseManagement.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ExpenseManagement.Models.Employee", b =>
+            modelBuilder.Entity("ExpenseManagement.Models.Comment", b =>
                 {
-                    b.HasBaseType("ExpenseManagement.Models.ApplicationUser");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("Role");
-
-                    b.HasDiscriminator().HasValue("Employee");
+                    b.HasOne("ExpenseManagement.Models.Expense")
+                        .WithMany("Comments")
+                        .HasForeignKey("ExpenseID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

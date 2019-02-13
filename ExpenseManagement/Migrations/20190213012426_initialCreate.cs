@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ExpenseManagement.Migrations
@@ -11,9 +12,9 @@ namespace ExpenseManagement.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 255, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 255, nullable: true),
+                    Id = table.Column<string>(maxLength: 128, nullable: false),
+                    Name = table.Column<string>(maxLength: 128, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 128, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -25,26 +26,21 @@ namespace ExpenseManagement.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 255, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 255, nullable: true),
-                    Email = table.Column<string>(maxLength: 255, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 255, nullable: true),
-                    EmailConfirmed = table.Column<short>(nullable: false),
+                    Id = table.Column<string>(maxLength: 128, nullable: false),
+                    UserName = table.Column<string>(maxLength: 128, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 128, nullable: true),
+                    Email = table.Column<string>(maxLength: 128, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 128, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<short>(nullable: false),
-                    TwoFactorEnabled = table.Column<short>(nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<short>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true)
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,13 +52,12 @@ namespace ExpenseManagement.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(maxLength: 255, nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     Amount = table.Column<decimal>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
                     Status = table.Column<string>(nullable: true),
-                    Comments = table.Column<string>(nullable: true),
                     Receipt = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -75,7 +70,7 @@ namespace ExpenseManagement.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -96,7 +91,7 @@ namespace ExpenseManagement.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -176,6 +171,28 @@ namespace ExpenseManagement.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
+                    DateString = table.Column<string>(nullable: true),
+                    ExpenseID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Comments_Expenses_ExpenseID",
+                        column: x => x.ExpenseID,
+                        principalTable: "Expenses",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -212,6 +229,11 @@ namespace ExpenseManagement.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ExpenseID",
+                table: "Comments",
+                column: "ExpenseID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -232,13 +254,16 @@ namespace ExpenseManagement.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Expenses");
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Expenses");
         }
     }
 }

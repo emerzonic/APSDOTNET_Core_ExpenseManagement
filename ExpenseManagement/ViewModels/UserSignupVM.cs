@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExpenseManagement.ViewModels
 {
-    public class EmployeeSignupVM : EmployeeLoginVM
+    public class UserSignupVM : UserLoginVM
     {
         [Required]
         public string FirstName { get; set; }
@@ -11,11 +11,6 @@ namespace ExpenseManagement.ViewModels
         public string LastName { get; set; }
         public string AccessCode { get; set; }
 
-        public EmployeeSignupVM(){}
-
-        public string SetEmployeeRole()
-        {
-            return AccessCode == "123" ? "ADMIN" : "Employee";
-        }
+        public UserSignupVM(){}
     }
 }

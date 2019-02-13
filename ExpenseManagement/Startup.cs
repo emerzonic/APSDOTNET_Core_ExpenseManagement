@@ -1,12 +1,13 @@
 ﻿using System;
 using ExpenseManagement.Data;
 using ExpenseManagement.Models;
+using ExpenseManagement.Repository;
+using ExpenseManagement.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,9 +27,8 @@ namespace ExpenseManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-        
             services.AddDbContext<ExpenseMangtDbContext>(options =>
-            options.UseMySQL("server=localhost;port=8809;database=expenseDb;user=root;password=root"));
+            options.UseMySql("server=localhost;port=8889;database=expenseManagement;uid=root;pwd=root;"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -80,8 +80,11 @@ namespace ExpenseManagement
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
-           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,8 +104,6 @@ namespace ExpenseManagement
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
-
             app.UseAuthentication();
             app.UseMvc(routes =>
             {
