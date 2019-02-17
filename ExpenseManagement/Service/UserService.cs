@@ -8,13 +8,11 @@ namespace ExpenseManagement.Service
     {
         private readonly IUserRepository userRepository;
 
-
         public UserService(
             IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
-
 
 
         public ApplicationUser BuildNewUser(UserSignupVM formData)
@@ -27,11 +25,9 @@ namespace ExpenseManagement.Service
                 LastName = formData.LastName
             };
             Role role = new Role(formData.AccessCode);
-            //role  Users.Add(user);
             user.AddRole(role);
             return user;
         }
-
 
 
         public ApplicationUser GetUser(string email)
