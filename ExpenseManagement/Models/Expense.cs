@@ -47,9 +47,6 @@ namespace ExpenseManagement.Models
                 case "Pay":
                     Status = "Paid";
                     break;
-                default:
-                    Status = newStatus;
-                    break;
             }
         }
     } 
