@@ -55,10 +55,7 @@ namespace ExpenseManagement.Controllers
                 var result = await manager.CreateAsync(user, formData.Password);
                 if (!result.Succeeded)
                 {
-                    //foreach (var error in result.Errors)
-                    //{
                     ModelState.AddModelError("Email", DbError.GetErrorText(result));
-                    //}
                     return View(formData);
                 }
                 context.Add(user);
@@ -93,15 +90,10 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                //ApplicationUser user = new ApplicationUser();
                 ApplicationUser user = userService.GetUser(userLoginVM.Email);
-                //user.Email = user1.Email;
-                //var result = await signInManager.PasswordSignInAsync(user.Email,
-                //userLoginVM.Password, user.EmailConfirmed, lockoutOnFailure: false);
                 var identity = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, user.Email),
-                    //new Claim(ClaimTypes.Role, user.Role.Name),
                     }, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var principal = new ClaimsPrincipal(identity);
