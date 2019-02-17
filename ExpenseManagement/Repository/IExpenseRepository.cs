@@ -10,7 +10,7 @@ namespace ExpenseManagement.Repository
 
         void AddExpense(Expense expense);
         List<Expense> GetAllExpenses();
-        Expense GetOneExpense(int id);
+        Expense GetOneExpense(Guid id);
         void UpdateExpense(Expense expense);
         void DeleteExpense(Expense expense);
         void Save();

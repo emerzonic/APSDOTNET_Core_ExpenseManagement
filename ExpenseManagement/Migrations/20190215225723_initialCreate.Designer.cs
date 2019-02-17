@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseManagement.Migrations
 {
     [DbContext(typeof(ExpenseMangtDbContext))]
-    [Migration("20190213012426_initialCreate")]
+    [Migration("20190215225723_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,10 @@ namespace ExpenseManagement.Migrations
                         .HasMaxLength(128);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -72,16 +76,16 @@ namespace ExpenseManagement.Migrations
 
             modelBuilder.Entity("ExpenseManagement.Models.Comment", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("DateString");
 
-                    b.Property<int?>("ExpenseID");
+                    b.Property<Guid?>("ExpenseID");
 
                     b.Property<string>("Text");
 
-                    b.Property<int>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("ID");
 
@@ -92,7 +96,7 @@ namespace ExpenseManagement.Migrations
 
             modelBuilder.Entity("ExpenseManagement.Models.Expense", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(255);
 
@@ -106,7 +110,7 @@ namespace ExpenseManagement.Migrations
 
                     b.Property<string>("Status");
 
-                    b.Property<int>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("ID");
 
@@ -122,6 +126,9 @@ namespace ExpenseManagement.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Name")
                         .HasMaxLength(128);
 
@@ -135,6 +142,8 @@ namespace ExpenseManagement.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -225,6 +234,17 @@ namespace ExpenseManagement.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ExpenseManagement.Models.Role", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasDiscriminator().HasValue("Role");
+                });
+
             modelBuilder.Entity("ExpenseManagement.Models.Comment", b =>
                 {
                     b.HasOne("ExpenseManagement.Models.Expense")
@@ -275,6 +295,13 @@ namespace ExpenseManagement.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ExpenseManagement.Models.Role", b =>
+                {
+                    b.HasOne("ExpenseManagement.Models.ApplicationUser")
+                        .WithMany("Roles")
+                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

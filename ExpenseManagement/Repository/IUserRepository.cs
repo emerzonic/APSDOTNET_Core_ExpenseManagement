@@ -9,8 +9,8 @@ namespace ExpenseManagement.Repository
 {
     public interface IUserRepository
     {
-        Task<IAsyncResult> GetUser(int id);
-        Task<IdentityResult>  CreateUser(User user, string password);
-        Task<IActionResult> LoginUserAsync(User user);
+         ApplicationUser GetUser(string email);
+        //Task<IActionResult>  CreateUser(User user, string password);
+        //Task<IActionResult> LoginUserAsync(ApplicationUser user);
     }
 }

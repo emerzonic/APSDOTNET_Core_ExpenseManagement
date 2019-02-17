@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseManagement.Models
 {
     public class Role: IdentityRole
     {
-        public Role(string name){
-            Name = SetUserRole(name);
-    }
+        public Role(string name)
+        {
+            Name = SetRoleName(name);
+        }
 
-        public string SetUserRole(string accessCode)
+        private string SetRoleName(string accessCode)
         {
             string userRole = "";
             switch (accessCode)
@@ -25,9 +28,5 @@ namespace ExpenseManagement.Models
             }
             return userRole;
         }
-
-
     }
-
-   
 }

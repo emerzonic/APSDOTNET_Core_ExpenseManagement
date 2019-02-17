@@ -8,10 +8,10 @@ namespace ExpenseManagement.Service
     public interface IExpenseService
     {
          List<Expense> GetAllExpenses();
-        void AddExpense(AddExpenseVM expense);
-         Expense GetOneExpense(int id);
+        void AddExpense(AddExpenseVM expense, string userId);
+         Expense GetOneExpense(Guid id);
         void UpdateExpense(UpdateExpenseVM expense);
-        void DeleteExpense(int id);
-        void UpdateExpenseStatus(string status, int id);
+        void DeleteExpense(Guid id);
+        void UpdateExpenseStatus(string status, Guid id);
     }
 }

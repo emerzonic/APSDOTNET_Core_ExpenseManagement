@@ -5,12 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseManagement.ViewModels
 {
-    public class UpdateExpenseVM : Expense
+    public class UpdateExpenseVM
     {
-        //public string Status { get; set; }
-        //[Required]
-        //public int ID { get; set; }
-      
+        [Required]
+        public Guid ID { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Required]
+        public Decimal Amount { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
+        [Required]
+        public string Receipt { get; set; }
+
         public UpdateExpenseVM()
         {
 

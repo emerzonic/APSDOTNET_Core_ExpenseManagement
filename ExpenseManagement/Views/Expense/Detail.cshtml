@@ -12,7 +12,10 @@
         <div class="card-body expense-detail-card">
             <h5 class="card-title">@Model.Description</h5>
             <h6 class="card-subtitle mb-2 text-muted">@Model.Date Status: @Model.Status</h6>
-            <p class="card-text">@Model.Comments</p>
+            @foreach (var c in Model.Comments)
+    {
+        <p class="">@c.GetText()</p>
+}
             @if (Model.Status == "New")
     {
         <a href="/Expense/Edit/@Model.ID" class="card-link">Edit</a>
@@ -22,12 +25,12 @@
 }
             @if (Model.Status == "In Review")
     {
-        <a href="/Expense/Approve/@Model.ID" class="card-link">Approved Expense</a>
+        <a href="/Expense/UpdateStatus/Approve/@Model.ID" class="card-link">Approved Expense</a>
         <a href="/Expense/UpdateStatus/Reject/@Model.ID" class="card-link">Reject Expense</a>
 }
-            @if (Model.Status == "Approved")
+            @if (Model.Status == "Approved - Pending Payment")
     {
-        <a href="/Expense/UpdateStatus/Payment/@Model.ID" class="card-link">Mark as Paid</a>
+        <a href="/Expense/UpdateStatus/Pay/@Model.ID" class="card-link">Mark as Paid</a>
 }
             <a asp-controller="Expense" asp-action="Dashboard" class="card-link">Go to Dashboard</a>
         </div>

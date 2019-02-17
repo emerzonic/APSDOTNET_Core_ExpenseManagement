@@ -22,9 +22,18 @@
     <Folder Include="Data\" />
     <Folder Include="Service\" />
     <Folder Include="Repository\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Data\ExpenseContext %28copy%29.cs" />
     <None Remove="Data\ExpenseDBContextcs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20190213012426_initialCreate.cs" />
+    <Compile Remove="Migrations\20190214155556_initialCreate.cs" />
+    <Compile Remove="Migrations\20190214155556_initialCreate.Designer.cs" />
+    <Compile Remove="Models\User.cs" />
+    <Compile Remove="Migrations\20190214161832_initialCreate.cs" />
+    <Compile Remove="Migrations\20190214231534_initialCreate.cs" />
   </ItemGroup>
 </Project>

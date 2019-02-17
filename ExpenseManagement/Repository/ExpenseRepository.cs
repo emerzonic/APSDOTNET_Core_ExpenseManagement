@@ -33,21 +33,30 @@ namespace ExpenseManagement.Repository
 
         public List<Expense> GetAllExpenses()
         {
-            return  context.Expenses.ToList();
 
+            List<Expense> expenses =  context.Expenses.ToList();
+            return expenses;
         }
 
      
 
-        public Expense GetOneExpense(int id)
+        public Expense GetOneExpense(Guid id)
         {
-            return context.Expenses.Single(e => e.ID == id);
+            return context.Expenses
+            .Include(e => e.Comments)
+            .Single(e => e.ID == id);
         }
+
+
 
         public void Save()
         {
             context.SaveChanges();
         }
+
+
+
+
 
         public void UpdateExpense(Expense expense)
         {

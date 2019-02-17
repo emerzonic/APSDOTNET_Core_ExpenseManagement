@@ -26,12 +26,6 @@
                     <input asp-for="Amount" value="@Model.Amount" type="text" class="form-control" placeholder="Enter amount">
                     <span asp-validation-for="Amount" class="form-text text-danger"></span>
                 </div>
-                <div class="form-group">
-                    @foreach (var c in Model.Comments)
-        {
-            <p class="">@c.Text</p>
-}
-                </div>
                 <div class="form-group custom-file">
                     <p class="">@Model.Receipt</p>
                 </div>
@@ -41,8 +35,6 @@
                     <span asp-validation-for="Receipt" class="form-text text-danger"></span>
                 </div>
                 <input asp-for="ID" type="hidden">
-                <input asp-for="Status" type="hidden">
-
                 <button type="submit" class="btn btn-primary my-3">Submit</button>
                 <a href="/Expense/Detail/@Model.ID" class="btn btn-primary my-3">Cancel</a>
 

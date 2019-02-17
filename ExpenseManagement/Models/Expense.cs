@@ -7,16 +7,18 @@ namespace ExpenseManagement.Models
     public class Expense
     {
        [StringLength(255)]
-       public int ID { get; set; }
+       public Guid ID { get; set; }
        public string Description { get; set; }
        public Decimal Amount { get; set; }
        public DateTime Date { get; set; }
-       public int UserId { get; set; }
+       public Guid UserId { get; set; }
        public string Status { get; set; }
        public List<Comment> Comments { get; set; }
        public string Receipt { get; set; }
 
-        public Expense() { }
+        public Expense() {
+            Status = "New";
+            }
 
         public void AddComment(Comment newComment)
         {
@@ -40,10 +42,13 @@ namespace ExpenseManagement.Models
                     Status = "Rejected";
                     break;
                 case "Approve":
-                    Status = "Approved";
+                    Status = "Approved - Pending Payment";
                     break;
-                case "Payment":
+                case "Pay":
                     Status = "Paid";
+                    break;
+                default:
+                    Status = newStatus;
                     break;
             }
         }

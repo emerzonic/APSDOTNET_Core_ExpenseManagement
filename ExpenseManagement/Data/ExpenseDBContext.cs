@@ -12,6 +12,9 @@ namespace ExpenseManagement.Data
         public DbSet<Comment> Comments { get; set; }
 
 
+
+
+
         public ExpenseMangtDbContext(
             DbContextOptions<ExpenseMangtDbContext> options
             ):base (options)
@@ -26,7 +29,7 @@ namespace ExpenseManagement.Data
             }
 
             base.OnModelCreating(builder);
-
+            //builder.Entity<ApplicationUserRole>().HasKey(a => new { a.UserId, a.RoleId });
             builder.Entity<ApplicationUser>().Property(u => u.UserName).HasMaxLength(128);
             builder.Entity<ApplicationUser>().Property(u => u.Email).HasMaxLength(128);
             builder.Entity<ApplicationUser>().Property(u => u.Id).HasMaxLength(128);

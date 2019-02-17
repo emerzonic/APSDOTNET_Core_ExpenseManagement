@@ -6,6 +6,7 @@ using ExpenseManagement.Models;
 using ExpenseManagement.Service;
 using ExpenseManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,112 +14,133 @@ namespace ExpenseManagement.Controllers
 {
 
     [Authorize]
-        public class ExpenseController : Controller
+    public class ExpenseController : Controller
+    {
+        private IExpenseService expenseService;
+        private UserManager<ApplicationUser> manager;
+        public ExpenseController(ExpenseMangtDbContext dbContext,
+                IExpenseService expenseService,
+                UserManager<ApplicationUser> manager
+            )
         {
-            private ExpenseMangtDbContext context;
-            private IExpenseService expenseService;
-            public ExpenseController(ExpenseMangtDbContext dbContext,
-                    IExpenseService expenseService)
-            {
-            this.context = dbContext;
             this.expenseService = expenseService;
-            }
+            this.manager = manager;
+        }
 
 
-            [HttpGet]
-            public IActionResult Dashboard(){
-                List<Expense> expenses = null;
-                try{
-                    expenseService.GetAllExpenses();
-                }catch (Exception ex){
-                    Console.WriteLine(ex.Message);
-                }          
-                return View(expenses);
-            }
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            List<Expense> expenses = null;
 
-
-
-
-            [HttpGet]
-            public IActionResult Add()
+            try
             {
-                AddExpenseVM addExpense = new AddExpenseVM();
-                return View(addExpense);
+                expenses = expenseService.GetAllExpenses();
             }
-
-            
-
-
-            [HttpPost]
-            public IActionResult Add(AddExpenseVM addExpenseVM){
-                if (!ModelState.IsValid){
-                    return View(addExpenseVM);
-                }
-                try{
-                    expenseService.AddExpense(addExpenseVM);
-                }catch (Exception ex){
-                    Console.WriteLine(ex.Message);
-                } 
-                return Redirect("/Expense/Dashboard");
-            }
-            
-
-      
-
-            [HttpGet]
-            [Route("/Expense/Detail/{id}")]
-            public IActionResult Detail(int id)
+            catch (Exception ex)
             {
-                Expense expense = null;
-                try
-                {
+                Console.WriteLine(ex.Message);
+            }
+
+            return View(expenses);
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            AddExpenseVM addExpense = new AddExpenseVM();
+            return View(addExpense);
+        }
+
+
+
+
+        [HttpPost]
+        public IActionResult Add(AddExpenseVM addExpenseVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(addExpenseVM);
+            }
+
+            try
+            {
+                Console.Write(this.User);
+                string userId =  manager.GetUserId(HttpContext.User);
+                expenseService.AddExpense(addExpenseVM, userId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View(addExpenseVM);
+            }
+
+            return Redirect("/Expense/Dashboard");
+        }
+
+
+
+
+        [HttpGet]
+        [Route("/Expense/Detail/{id}")]
+        public IActionResult Detail(Guid id)
+        {
+            Expense expense = null;
+
+            try
+            {
                 expense = expenseService.GetOneExpense(id);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                return View(expense);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
+            return View(expense);
+        }
 
 
 
-            [HttpGet]
-            [Route("/Expense/Edit/{id}")]
-            public IActionResult Edit(int id)
-            {
+
+        [HttpGet]
+        [Route("/Expense/Edit/{id}")]
+        public IActionResult Edit(Guid id)
+        {
             UpdateExpenseVM updateExpense = null;
-                try
-                {
+
+            try
+            {
                 Expense expense = expenseService.GetOneExpense(id);
                 updateExpense = new UpdateExpenseVM
                 {
                     Description = expense.Description,
                     Amount = expense.Amount,
                     Date = expense.Date,
-                    Comments = expense.Comments,
                     Receipt = expense.Receipt,
-                    Status = expense.Status,
                     ID = expense.ID
                 };
 
             }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                return View(updateExpense);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
+            return View(updateExpense);
+        }
 
-            [HttpPost]
-            public IActionResult Edit(UpdateExpenseVM updatedExpense)
+
+        [HttpPost]
+        public IActionResult Edit(UpdateExpenseVM updatedExpense)
+        {
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
                 return View(updatedExpense);
             }
+
             try
             {
                 expenseService.UpdateExpense(updatedExpense);
@@ -127,108 +149,45 @@ namespace ExpenseManagement.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
+
             return Redirect("/Expense/Detail/" + updatedExpense.ID);
         }
-               
 
 
 
 
-            [HttpGet]
-            [Route("/Expense/Delete/{id}")]
-            public IActionResult Delete(int id)
+
+        [HttpGet]
+        [Route("/Expense/Delete/{id}")]
+        public IActionResult Delete(Guid id)
+        {
+            try
             {
-                try
-                {
                 expenseService.DeleteExpense(id);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                return Redirect("/Expense/Dashboard");
             }
-
-
-            [HttpGet]
-            [Route("/Expense/UpdateStatus/{status}/{id}")]
-            public IActionResult UpdateStatus(string status, int id)
+            catch (Exception ex)
             {
-                Expense expense = null;
-                try
-                {
-                expenseService.UpdateExpenseStatus(status, id);
-                expense = expenseService.GetOneExpense(id);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                return Redirect("/Expense/Detail/" + expense.ID);
+                Console.WriteLine(ex.Message);
             }
 
+            return Redirect("/Expense/Dashboard");
+        }
 
 
-
-            [HttpGet]
-            [Route("/Expense/Approve/{id}")]
-            public IActionResult Approve(int id)
+        [HttpGet]
+        [Route("/Expense/UpdateStatus/{expenseStatus}/{id}")]
+        public IActionResult UpdateStatus(string expenseStatus, Guid id)
+        {
+            try
             {
-                Expense expense = null;
-                try
-                {
-                    expense = context.Expenses.Single(e => e.ID == id);
-                    expense.Status = "Approved";
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                return Redirect("/Expense/Detail/"+ expense.ID);
+                expenseService.UpdateExpenseStatus(expenseStatus, id);
             }
-
-            [HttpGet]
-            [Route("/Expense/Reject/{id}")]
-            public IActionResult Reject(int id)
+            catch (Exception ex)
             {
-                Expense expense = null;
-                try
-                {
-                    expense = context.Expenses.Single(e => e.ID == id);
-                    expense.Status = "Rejected";
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                return Redirect("/Expense/Detail/" + expense.ID);
+                Console.WriteLine(ex.Message);
             }
 
-
-
-            [HttpGet]
-            [Route("/Expense/Payment/{id}")]
-            public IActionResult Pay(int id)
-            {
-                Expense expense = null;
-                try
-                {
-                    expense = context.Expenses.Single(e => e.ID == id);
-                    expense.Status = "Paid";
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                return Redirect("/Expense/Detail/" + expense.ID);
-            }
+            return Redirect("/Expense/Detail/" + id);
         }
     }
+}

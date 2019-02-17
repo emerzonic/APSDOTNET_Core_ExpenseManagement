@@ -5,11 +5,10 @@ using ExpenseManagement.Data;
 using ExpenseManagement.Models;
 using ExpenseManagement.Repository;
 using ExpenseManagement.ViewModels;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace ExpenseManagement.Service
 {
-    public class ExpenseService:IExpenseService
+    public class ExpenseService : IExpenseService
     {
         private IExpenseRepository expenseRepository;
         public ExpenseService(IExpenseRepository expenseRepository)
@@ -17,9 +16,9 @@ namespace ExpenseManagement.Service
             this.expenseRepository = expenseRepository;
         }
 
-    
 
-        public void AddExpense(AddExpenseVM addExpenseVM)
+
+        public void AddExpense(AddExpenseVM addExpenseVM, string userId)
         {
             Expense newExpense = new Expense
             {
@@ -28,27 +27,27 @@ namespace ExpenseManagement.Service
                 Date = addExpenseVM.Date,
                 Comments = new List<Comment>(),
                 Receipt = addExpenseVM.Receipt,
-                Status = "New",
-                UserId = 1
+                UserId = new Guid(userId),
             };
+
             if (!string.IsNullOrEmpty(addExpenseVM.Comments))
             {
-                var newComment = new Comment
-                {
-                    Text = addExpenseVM.Comments,
-                    UserId = 1,
-                    DateString = DateTime.Now.ToLongDateString()
-
-                };
+                var newComment = new Comment();
+                newComment.SetText(addExpenseVM.Comments);
+                newComment.SetUserId(new Guid(userId));
+                newComment.SetDate(DateTime.Now.ToLongDateString());
+                newComment.SetID(Guid.NewGuid());
                 newExpense.AddComment(newComment);
             };
+
+            newExpense.ID = Guid.NewGuid();
             expenseRepository.AddExpense(newExpense);
         }
 
 
 
 
-        public void DeleteExpense(int id)
+        public void DeleteExpense(Guid id)
         {
             Expense expense = expenseRepository.GetOneExpense(id);
             expenseRepository.DeleteExpense(expense);
@@ -60,12 +59,11 @@ namespace ExpenseManagement.Service
         public List<Expense> GetAllExpenses()
         {
             return expenseRepository.GetAllExpenses();
-
         }
 
-   
 
-        public Expense GetOneExpense(int id)
+
+        public Expense GetOneExpense(Guid id)
         {
             return expenseRepository.GetOneExpense(id);
         }
@@ -78,12 +76,14 @@ namespace ExpenseManagement.Service
             expense.Description = updatedExpense.Description;
             expense.Amount = updatedExpense.Amount;
             expense.Date = updatedExpense.Date;
-            expense.Comments = updatedExpense.Comments;
             expense.Receipt = updatedExpense.Receipt;
             expenseRepository.UpdateExpense(expense);
         }
 
-        public void UpdateExpenseStatus(string newStatus, int id)
+
+
+
+        public void UpdateExpenseStatus(string newStatus, Guid id)
         {
             Expense expense = expenseRepository.GetOneExpense(id);
             expense.UpdateStatus(newStatus);

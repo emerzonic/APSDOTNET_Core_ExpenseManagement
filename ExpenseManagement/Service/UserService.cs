@@ -1,17 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using ExpenseManagement.Data;
-using ExpenseManagement.Models;
+﻿using ExpenseManagement.Models;
 using ExpenseManagement.Repository;
 using ExpenseManagement.ViewModels;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseManagement.Service
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
+
 
         public UserService(
             IUserRepository userRepository)
@@ -21,35 +17,26 @@ namespace ExpenseManagement.Service
 
 
 
-        public Task<IdentityResult> CreateUser(UserSignupVM formData)
+        public ApplicationUser BuildNewUser(UserSignupVM formData)
         {
-            User user = new User{
-                    UserName = formData.Email,
-                    FirstName = formData.FirstName,
-                    LastName = formData.LastName
-                };
-                Role userRole = new Role(formData.AccessCode);
-                user.AddRole(userRole);
-               return userRepository.CreateUser(user, formData.Password); 
-        }
-
-
-        public Task<IActionResult> LoginUser(UserLoginVM loginVM)
-        {
-            User user = new User
+            ApplicationUser user = new ApplicationUser
             {
-                Email = loginVM.Email,
-                Password = loginVM.Password
+                UserName = formData.Email,
+                Email = formData.Email,
+                FirstName = formData.FirstName,
+                LastName = formData.LastName
             };
-            return userRepository.LoginUserAsync(user);
+            Role role = new Role(formData.AccessCode);
+            //role  Users.Add(user);
+            user.AddRole(role);
+            return user;
         }
 
 
-        public Task<IActionResult> GetUser(int id)
+
+        public ApplicationUser GetUser(string email)
         {
-            throw new NotImplementedException();
+          return userRepository.GetUser(email);
         }
-
-       
     }
 }
