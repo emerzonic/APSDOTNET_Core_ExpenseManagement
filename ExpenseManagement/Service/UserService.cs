@@ -36,7 +36,7 @@ namespace ExpenseManagement.Service
 
         public ApplicationUser GetUser(string email)
         {
-          return userRepository.GetUser(email);
+          return userRepository.GetUserByUsername(email);
         }
     }
 }

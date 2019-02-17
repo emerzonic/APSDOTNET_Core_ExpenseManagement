@@ -24,7 +24,7 @@ namespace ExpenseManagement.Repository
         }
 
 
-        public ApplicationUser GetUser(string email)
+        public ApplicationUser GetUserByUsername(string email)
         {
             return context.Users
                  .Include(u => u.GetRoles())

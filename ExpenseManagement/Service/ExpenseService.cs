@@ -17,7 +17,6 @@ namespace ExpenseManagement.Service
         }
 
 
-
         public void AddExpense(AddExpenseVM addExpenseVM, string userId)
         {
             Expense newExpense = new Expense
@@ -45,15 +44,11 @@ namespace ExpenseManagement.Service
         }
 
 
-
-
         public void DeleteExpense(Guid id)
         {
             Expense expense = expenseRepository.GetOneExpense(id);
             expenseRepository.DeleteExpense(expense);
         }
-
-
 
 
         public List<Expense> GetAllExpenses()
@@ -62,12 +57,10 @@ namespace ExpenseManagement.Service
         }
 
 
-
         public Expense GetOneExpense(Guid id)
         {
             return expenseRepository.GetOneExpense(id);
         }
-
 
 
         public void UpdateExpense(UpdateExpenseVM updatedExpense)
@@ -81,14 +74,11 @@ namespace ExpenseManagement.Service
         }
 
 
-
-
         public void UpdateExpenseStatus(string newStatus, Guid id)
         {
             Expense expense = expenseRepository.GetOneExpense(id);
-            expense.UpdateStatus(newStatus);
+            expense.UpdateExpenseStatus(newStatus);
             expenseRepository.Save();
         }
-
     }
 }
