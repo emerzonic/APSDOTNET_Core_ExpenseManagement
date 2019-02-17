@@ -18,14 +18,11 @@ namespace ExpenseManagement.Models
 
         public Expense() {
             Status = "New";
-            }
+            Comments = new List<Comment>();
+        }
 
         public void AddComment(Comment newComment)
         {
-            if(Comments == null)
-            {
-                Comments = new List<Comment>();
-            }
             Comments.Add(newComment);
         }
 
