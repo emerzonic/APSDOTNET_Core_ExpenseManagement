@@ -37,13 +37,10 @@ namespace ExpenseManagement
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //    services.AddDefaultIdentity<ApplicationUser>()
-            //.AddDefaultUI(UIFramework.Bootstrap4)
-            //.AddEntityFrameworkStores<ExpenseMangtDbContext>();
+         
             services.AddIdentityCore<ApplicationUser>(
                options => options.Stores.MaxLengthForKeys = 128)
                    .AddEntityFrameworkStores<ExpenseMangtDbContext>();
-            //.AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
