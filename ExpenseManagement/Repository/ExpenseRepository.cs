@@ -16,8 +16,6 @@ namespace ExpenseManagement.Repository
             this.context = dbContext;
         }
 
-      
-
 
         public void AddExpense(Expense expense)
         {
@@ -25,20 +23,21 @@ namespace ExpenseManagement.Repository
             context.SaveChanges();
         }
 
+
         public void DeleteExpense(Expense expense)
         {
             context.Remove(expense);
             context.SaveChanges();
         }
 
+
         public List<Expense> GetAllExpenses()
         {
 
-            List<Expense> expenses =  context.Expenses.ToList();
+            List<Expense> expenses = context.Expenses.ToList();
             return expenses;
         }
 
-     
 
         public Expense GetOneExpense(Guid id)
         {
@@ -48,14 +47,10 @@ namespace ExpenseManagement.Repository
         }
 
 
-
         public void Save()
         {
             context.SaveChanges();
         }
-
-
-
 
 
         public void UpdateExpense(Expense expense)
