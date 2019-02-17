@@ -4,12 +4,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseManagement.Utils
 {
-    public class DbError
+    public static class DbError
     {
-        public string ErrorText { get; set; }
-        public DbError()
-        {
-        }
 
         public static string GetErrorText(IdentityResult result)
         {
