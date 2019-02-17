@@ -7,7 +7,6 @@ namespace ExpenseManagement.Repository
 {
     public interface IExpenseRepository
     {
-
         void AddExpense(Expense expense);
         List<Expense> GetAllExpenses();
         Expense GetOneExpense(Guid id);
