@@ -175,19 +175,19 @@ namespace ExpenseManagement.Controllers
 
 
         [HttpGet]
-        [Route("/Expense/UpdateStatus/{expenseStatus}/{id}")]
-        public IActionResult UpdateStatus(string expenseStatus, Guid id)
+        [Route("/Expense/UpdateStatus/{expenseStatus}/{expenseId}")]
+        public IActionResult UpdateStatus(string expenseStatus, Guid expenseId)
         {
             try
             {
-                expenseService.UpdateExpenseStatus(expenseStatus, id);
+                expenseService.UpdateExpenseStatus(expenseStatus, expenseId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return Redirect("/Expense/Detail/" + id);
+            return Redirect("/Expense/Detail/" + expenseId);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace ExpenseManagement.Models
 
 
 
-        internal void UpdateStatus(string newStatus)
+        internal void UpdateExpenseStatus(string newStatus)
         {
             switch (newStatus)
             {
