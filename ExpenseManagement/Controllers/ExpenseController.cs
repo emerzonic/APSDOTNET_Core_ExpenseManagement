@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ExpenseManagement.Data;
 using ExpenseManagement.Models;
 using ExpenseManagement.Service;
@@ -8,7 +7,6 @@ using ExpenseManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Controllers
 {
@@ -68,9 +66,9 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                Console.Write(this.User);
-                string userId =  manager.GetUserId(HttpContext.User);
-                expenseService.AddExpense(addExpenseVM, userId);
+                //Console.Write(this.User);
+                //string userId = manager.GetUserId(HttpContext.User);
+                expenseService.AddExpense(addExpenseVM);
             }
             catch (Exception ex)
             {

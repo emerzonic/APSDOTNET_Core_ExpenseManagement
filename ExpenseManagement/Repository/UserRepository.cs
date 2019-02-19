@@ -17,8 +17,7 @@ namespace ExpenseManagement.Repository
     {
         private ExpenseMangtDbContext context;
 
-        public UserRepository(
-            ExpenseMangtDbContext dbContext)
+        public UserRepository(ExpenseMangtDbContext dbContext)
         {
             context = dbContext;
         }
@@ -27,10 +26,8 @@ namespace ExpenseManagement.Repository
         public ApplicationUser GetUserByUsername(string email)
         {
             return context.Users
-                 .Include(u => u.GetRoles())
+                 //.Include(u => u.Roles)
                  .Single(u => u.Email == email);
         }
-
-
     }
 }

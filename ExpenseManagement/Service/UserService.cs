@@ -1,32 +1,34 @@
 ﻿using ExpenseManagement.Models;
 using ExpenseManagement.Repository;
+using ExpenseManagement.Utils;
 using ExpenseManagement.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseManagement.Service
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
+        private readonly IRoleService roleService;
 
         public UserService(
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IRoleService roleService)
         {
             this.userRepository = userRepository;
+            this.roleService = roleService;
         }
 
 
         public ApplicationUser BuildNewUser(UserSignupVM formData)
         {
-            ApplicationUser user = new ApplicationUser
+            return new ApplicationUser
             {
                 UserName = formData.Email,
                 Email = formData.Email,
                 FirstName = formData.FirstName,
-                LastName = formData.LastName
+                LastName = formData.LastName,
             };
-            Role role = new Role(formData.AccessCode);
-            user.AddRole(role);
-            return user;
         }
 
 

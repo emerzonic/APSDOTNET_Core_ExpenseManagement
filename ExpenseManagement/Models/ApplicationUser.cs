@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseManagement.Models
@@ -8,22 +10,29 @@ namespace ExpenseManagement.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        private List<Role> Roles;
+
+
+        //public List<IdentityRole> Roles { get; set; }
 
         public ApplicationUser()
         {
-            Roles = new List<Role>();
+        //    Roles = new List<IdentityRole>();
         }
 
-        public List<Role> GetRoles()
-        {
-            return Roles;
-        }
+        //public async Task<ClaimsIdentity>
+        //GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        //{
+        //    var userIdentity = await manager
+        //        .CreateIdentityAsync(this,
+        //            DefaultAuthenticationTypes.ApplicationCookie);
+        //    return userIdentity;
+        //}
 
-        public void AddRole(Role role)
-        {
-            Roles.Add(role);
-        }
+        //public void AddRole(IdentityRole role)
+        //{
+        //    Roles.Add(role);
+        //}
+
 
     }
 }

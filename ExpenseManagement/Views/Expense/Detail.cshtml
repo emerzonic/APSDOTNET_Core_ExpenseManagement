@@ -14,7 +14,7 @@
             <h6 class="card-subtitle mb-2 text-muted">@Model.Date Status: @Model.Status</h6>
             @foreach (var c in Model.Comments)
     {
-        <p class="">@c.GetText()</p>
+        <p class="">@c.Text</p>
 }
             @if (Model.Status == "New")
     {

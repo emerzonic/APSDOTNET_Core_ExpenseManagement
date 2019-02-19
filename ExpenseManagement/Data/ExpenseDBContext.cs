@@ -25,6 +25,7 @@ namespace ExpenseManagement.Data
             }
 
             base.OnModelCreating(builder);
+            builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
             builder.Entity<ApplicationUser>().Property(u => u.UserName).HasMaxLength(128);
             builder.Entity<ApplicationUser>().Property(u => u.Email).HasMaxLength(128);
             builder.Entity<ApplicationUser>().Property(u => u.Id).HasMaxLength(128);
@@ -34,7 +35,6 @@ namespace ExpenseManagement.Data
             builder.Entity<IdentityRole>().Property(r => r.Name).HasMaxLength(128);
             builder.Entity<IdentityRole>().Property(r => r.Id).ValueGeneratedOnAdd();
             builder.Entity<IdentityRole>().Property(r => r.Id).HasMaxLength(128);
-
             builder.Entity<IdentityRole>().Property(r => r.NormalizedName).HasMaxLength(128);
         }
 

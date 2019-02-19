@@ -8,7 +8,7 @@ namespace ExpenseManagement.Service
     public interface IExpenseService
     {
          List<Expense> GetAllExpenses();
-        void AddExpense(AddExpenseVM expense, string userId);
+        void AddExpense(AddExpenseVM expense);
          Expense GetOneExpense(Guid id);
         void UpdateExpense(UpdateExpenseVM expense);
         void DeleteExpense(Guid id);

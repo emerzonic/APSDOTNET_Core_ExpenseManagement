@@ -11,14 +11,19 @@ namespace ExpenseManagement.Service
     public class ExpenseService : IExpenseService
     {
         private IExpenseRepository expenseRepository;
-        public ExpenseService(IExpenseRepository expenseRepository)
+        private IUserService userService;
+        public ExpenseService(IExpenseRepository expenseRepository,
+                              IUserService userService)
         {
             this.expenseRepository = expenseRepository;
+            this.userService = userService;
         }
 
 
-        public void AddExpense(AddExpenseVM addExpenseVM, string userId)
+        public void AddExpense(AddExpenseVM addExpenseVM)
         {
+            var user = userService.GetUser("emerson.doyah@gmail.com");
+
             Expense newExpense = new Expense
             {
                 Description = addExpenseVM.Description,
@@ -26,16 +31,19 @@ namespace ExpenseManagement.Service
                 Date = addExpenseVM.Date,
                 Comments = new List<Comment>(),
                 Receipt = addExpenseVM.Receipt,
-                UserId = new Guid(userId),
+                UserId = new Guid(user.Id),
             };
 
             if (!string.IsNullOrEmpty(addExpenseVM.Comments))
             {
-                var newComment = new Comment();
-                newComment.SetText(addExpenseVM.Comments);
-                newComment.SetUserId(new Guid(userId));
-                newComment.SetDate(DateTime.Now.ToLongDateString());
-                newComment.SetID(Guid.NewGuid());
+                var newComment = new Comment
+                {
+                    Text = addExpenseVM.Comments,
+                    Author = user.FirstName,
+                    Date = DateTime.Now.ToLongDateString(),
+                    ID = Guid.NewGuid()
+                };
+
                 newExpense.AddComment(newComment);
             };
 

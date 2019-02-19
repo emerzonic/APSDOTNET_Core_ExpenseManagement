@@ -6,7 +6,6 @@ namespace ExpenseManagement.Models
 {
     public class Expense
     {
-       [StringLength(255)]
        public Guid ID { get; set; }
        public string Description { get; set; }
        public Decimal Amount { get; set; }

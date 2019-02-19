@@ -2,9 +2,9 @@
 using ExpenseManagement.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace ExpenseManagement.Service
+namespace ExpenseManagement.Repository
 {
-    public interface IRoleService
+    public interface IRoleRepository
     {
         void CreateRole(string roleName);
         IdentityRole GetRole(string roleName);

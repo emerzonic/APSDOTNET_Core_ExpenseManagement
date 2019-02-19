@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseManagement.Migrations
 {
     [DbContext(typeof(ExpenseMangtDbContext))]
-    [Migration("20190215225723_initialCreate")]
+    [Migration("20190219061830_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,13 +79,13 @@ namespace ExpenseManagement.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("DateString");
+                    b.Property<string>("Author");
+
+                    b.Property<string>("Date");
 
                     b.Property<Guid?>("ExpenseID");
 
                     b.Property<string>("Text");
-
-                    b.Property<Guid>("UserId");
 
                     b.HasKey("ID");
 
@@ -97,8 +97,7 @@ namespace ExpenseManagement.Migrations
             modelBuilder.Entity("ExpenseManagement.Models.Expense", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(255);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<decimal>("Amount");
 
@@ -126,9 +125,6 @@ namespace ExpenseManagement.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Name")
                         .HasMaxLength(128);
 
@@ -142,8 +138,6 @@ namespace ExpenseManagement.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -204,6 +198,17 @@ namespace ExpenseManagement.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.ToTable("IdentityUserRole<Guid>");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId");
@@ -232,17 +237,6 @@ namespace ExpenseManagement.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ExpenseManagement.Models.Role", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasDiscriminator().HasValue("Role");
                 });
 
             modelBuilder.Entity("ExpenseManagement.Models.Comment", b =>
@@ -295,13 +289,6 @@ namespace ExpenseManagement.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ExpenseManagement.Models.Role", b =>
-                {
-                    b.HasOne("ExpenseManagement.Models.ApplicationUser")
-                        .WithMany("Roles")
-                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

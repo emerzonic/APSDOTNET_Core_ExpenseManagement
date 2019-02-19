@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,7 +28,6 @@ namespace ExpenseManagement
         {
             services.AddDbContext<ExpenseMangtDbContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -37,7 +35,10 @@ namespace ExpenseManagement
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-         
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                options => options.Stores.MaxLengthForKeys = 128)
+                   .AddEntityFrameworkStores<ExpenseMangtDbContext>();
+
             services.AddIdentityCore<ApplicationUser>(
                options => options.Stores.MaxLengthForKeys = 128)
                    .AddEntityFrameworkStores<ExpenseMangtDbContext>();
@@ -77,8 +78,12 @@ namespace ExpenseManagement
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
