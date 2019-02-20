@@ -37,11 +37,9 @@ namespace ExpenseManagement
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
                 options => options.Stores.MaxLengthForKeys = 128)
-                   .AddEntityFrameworkStores<ExpenseMangtDbContext>();
-
-            services.AddIdentityCore<ApplicationUser>(
-               options => options.Stores.MaxLengthForKeys = 128)
-                   .AddEntityFrameworkStores<ExpenseMangtDbContext>();
+                   .AddEntityFrameworkStores<ExpenseMangtDbContext>()
+                .AddDefaultTokenProviders();
+                
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -76,8 +74,8 @@ namespace ExpenseManagement
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie();
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 

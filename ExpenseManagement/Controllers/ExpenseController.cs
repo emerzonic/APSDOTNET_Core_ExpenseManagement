@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExpenseManagement.Data;
 using ExpenseManagement.Models;
 using ExpenseManagement.Service;
@@ -15,14 +16,14 @@ namespace ExpenseManagement.Controllers
     public class ExpenseController : Controller
     {
         private IExpenseService expenseService;
-        private UserManager<ApplicationUser> manager;
+        private UserManager<ApplicationUser> _manager;
         public ExpenseController(ExpenseMangtDbContext dbContext,
                 IExpenseService expenseService,
                 UserManager<ApplicationUser> manager
             )
         {
             this.expenseService = expenseService;
-            this.manager = manager;
+            this._manager = manager;
         }
 
 
@@ -67,7 +68,7 @@ namespace ExpenseManagement.Controllers
             try
             {
                 //Console.Write(this.User);
-                //string userId = manager.GetUserId(HttpContext.User);
+                //string userId =  User.Claims.Single(c => c.Equals("Id"));
                 expenseService.AddExpense(addExpenseVM);
             }
             catch (Exception ex)

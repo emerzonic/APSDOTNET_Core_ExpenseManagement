@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ExpenseManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExpenseManagement.Controllers
 {
@@ -16,6 +17,7 @@ namespace ExpenseManagement.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Welcome()
         {
             return View();

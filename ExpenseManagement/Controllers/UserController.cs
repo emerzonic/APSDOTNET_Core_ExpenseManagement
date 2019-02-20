@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ExpenseManagement.Data;
@@ -8,6 +9,7 @@ using ExpenseManagement.Utils;
 using ExpenseManagement.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,21 +18,24 @@ namespace ExpenseManagement.Controllers
     public class UserController : Controller
     {
         private readonly IUserService userService;
-        private ExpenseMangtDbContext context;
-        private UserManager<ApplicationUser> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
+        private readonly ExpenseMangtDbContext context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public UserController(
                             IUserService userService,
                             ExpenseMangtDbContext context,
                             UserManager<ApplicationUser> userManager,
-                            RoleManager<IdentityRole> roleManager
+                            RoleManager<IdentityRole> roleManager,
+                            SignInManager<ApplicationUser> signInManager
                             )
         {
             this.userService = userService;
             this.context = context;
             this._userManager = userManager;
             this._roleManager = roleManager;
+            this._signInManager = signInManager;
         }
 
 
@@ -53,20 +58,20 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-             
+
                 var user = userService.BuildNewUser(formData);
                 var userResult = await _userManager.CreateAsync(user, formData.Password);
                 if (!userResult.Succeeded)
                 {
-                    ModelState.AddModelError("Email", DbError.GetErrorText(userResult));
+                    ModelState.AddModelError("Email", userResult.Errors.First().Description);
                     return View(formData);
                 }
 
                 var roleName = RoleNameGenerator.GetRoleNameFromAccessCode(formData.AccessCode);
-                bool roleExist = await _roleManager.RoleExistsAsync(roleName);
-                IdentityRole role = null;
+                bool roleExistResult = await _roleManager.RoleExistsAsync(roleName);
+                IdentityRole role;
 
-                if (!roleExist)
+                if (!roleExistResult)
                 {
                     role = new IdentityRole(roleName);
                     var roleResult = await _roleManager.CreateAsync(role);
@@ -77,7 +82,7 @@ namespace ExpenseManagement.Controllers
                 }
 
                 var addUserToRoleResult = await _userManager.AddToRoleAsync(user, role.Name);
-
+                var signInResult = await _signInManager.PasswordSignInAsync(user, formData.Password, false, false);
 
             }
             catch (Exception ex)
@@ -85,7 +90,7 @@ namespace ExpenseManagement.Controllers
                 Console.WriteLine(ex.Message);
                 return View(formData);
             }
-            return RedirectToAction(nameof(Login));
+            return Redirect("/Home/Welcome");
         }
 
 
@@ -110,20 +115,30 @@ namespace ExpenseManagement.Controllers
                 ApplicationUser user = userService.GetUser(userLoginVM.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError("InvalidLogin", "Invalid username and/or password.");
+                    ModelState.AddModelError("Email", "Invalid username and or password.");
                     return View(userLoginVM);
                 }
 
-                var identity = new ClaimsIdentity(new[]
+                await _userManager.AddClaimAsync(user, new Claim("FirstName", user.FirstName));
+                //var claims = User.Claims;
+                //await user.
+
+                //var identity = new ClaimsIdentity(new[]
+                //{
+                //    new Claim(ClaimTypes.Name, user.FirstName),
+                //    //new Claim(ClaimTypes., user.Id),
+
+                //    }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                //var principal = new ClaimsPrincipal(identity);
+                var signInResult = await _signInManager.PasswordSignInAsync(user, userLoginVM.Password, false, false);
+                if (!signInResult.Succeeded)
                 {
-                    new Claim(ClaimTypes.Name, user.Email),
-                    //new Claim(ClaimTypes.Role, user.Roles),
+                    ModelState.AddModelError("Email", "Invalid username and/or password.");
+                    return View(userLoginVM);
+                }
 
-                    }, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                //var ssre = await HttpContext.AuthenticateAsync(); //SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             }
             catch (Exception ex)
@@ -141,7 +156,8 @@ namespace ExpenseManagement.Controllers
         [Route("/user/logout")]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _signInManager.SignOutAsync();
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("/");
         }
     }
