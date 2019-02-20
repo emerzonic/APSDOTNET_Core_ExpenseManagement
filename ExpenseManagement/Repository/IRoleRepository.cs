@@ -6,7 +6,6 @@ namespace ExpenseManagement.Repository
 {
     public interface IRoleRepository
     {
-        void CreateRole(string roleName);
         IdentityRole GetRole(string roleName);
     }
 }

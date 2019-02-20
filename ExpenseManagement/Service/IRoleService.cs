@@ -6,7 +6,6 @@ namespace ExpenseManagement.Service
 {
     public interface IRoleService
     {
-        void CreateRole(string roleName);
         IdentityRole GetRole(string roleName);
     }
 }

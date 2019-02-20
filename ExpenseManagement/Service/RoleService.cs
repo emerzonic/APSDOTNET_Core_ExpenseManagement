@@ -13,10 +13,7 @@ namespace ExpenseManagement.Service
             this.roleRepository = roleRepository;
         }
 
-        public void CreateRole(string roleName)
-        {
-             roleRepository.CreateRole(roleName);
-        }
+       
 
         public IdentityRole GetRole(string roleName)
         {

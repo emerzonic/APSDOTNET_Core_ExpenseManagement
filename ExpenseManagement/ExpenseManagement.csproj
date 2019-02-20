@@ -38,5 +38,7 @@
     <Compile Remove="Migrations\ExpenseMangtDbContextModelSnapshot.cs" />
     <Compile Remove="Migrations\20190219050100_initialCreate.cs" />
     <Compile Remove="Migrations\20190219050100_initialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20190219061830_initialCreate.cs" />
+    <Compile Remove="Migrations\20190220152238_initialCreate.cs" />
   </ItemGroup>
 </Project>

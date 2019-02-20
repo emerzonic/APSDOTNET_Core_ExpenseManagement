@@ -11,8 +11,5 @@ namespace ExpenseManagement.Service
     {
         ApplicationUser BuildNewUser(UserSignupVM signupVM);
         ApplicationUser GetUser(string email);
-        //ApplicationUser GetCurrentUser();
-        //Task<IActionResult> LoginUser(UserLoginVM loginVM);
-
     }
 }

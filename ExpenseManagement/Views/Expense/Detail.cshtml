@@ -1,4 +1,4 @@
-﻿@model ExpenseManagement.Models.Expense
+﻿@model ExpenseManagement.ViewModels.ExpenseAndCommentVM
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -8,30 +8,62 @@
     <h1 class="display-4">Expense Detail</h1>
 </div>
 <div class="row">
-    <div class="card col-md-8 mx-auto">
+    <div class="card col-md-10 mx-auto">
         <div class="card-body expense-detail-card">
-            <h5 class="card-title">@Model.Description</h5>
-            <h6 class="card-subtitle mb-2 text-muted">@Model.Date Status: @Model.Status</h6>
-            @foreach (var c in Model.Comments)
-    {
-        <p class="">@c.Text</p>
-}
-            @if (Model.Status == "New")
-    {
-        <a href="/Expense/Edit/@Model.ID" class="card-link">Edit</a>
-        <a href="/Expense/Delete/@Model.ID" class="card-link">Delete Expense</a>
-        <a href="/Expense/UpdateStatus/Review/@Model.ID" class="card-link">Mark as In Review</a>
+            <h5 class="card-title expense-title">@Model.Expense.Description</h5>
+            <div class="row">
+                <div class="col-md-5">
+                    <h6 class="display-4 text-danger">@Model.Expense.Date </h6>
+                    <span>Date</span>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="display-4 text-danger">@Model.Expense.Status</h6>
+                    <span>Status</span>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="display-4 text-danger">$@Model.Expense.Amount</h6>
+                    <span>Amount</span>
+                </div>
+            </div>
+            @foreach (var c in Model.Expense.Comments)
+            {
+            <div class="media">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">@c.Author <span class="">@c.Date</span></h5>
+                    <p>@c.Text</p>
+                </div>
+            </div>
+            }
+            <button id="addCommentButton" class="btn btn-primary my-3">Add Comment</button>
 
-}
-            @if (Model.Status == "In Review")
-    {
-        <a href="/Expense/UpdateStatus/Approve/@Model.ID" class="card-link">Approved Expense</a>
-        <a href="/Expense/UpdateStatus/Reject/@Model.ID" class="card-link">Reject Expense</a>
-}
-            @if (Model.Status == "Approved - Pending Payment")
-    {
-        <a href="/Expense/UpdateStatus/Pay/@Model.ID" class="card-link">Mark as Paid</a>
-}
+            <p class="">Attached Document: @Model.Expense.Receipt</p>
+
+            <form asp-controller="Comment" asp-action="Add" method="post" id="addCommentForm" class="d-none">
+                <div class="form-group">
+                    <textarea asp-for="AddCommentVM.Text" type="text" id="addCommentTextbox" class="form-control" placeholder="Enter comments"></textarea>
+                    <span asp-validation-for="AddCommentVM.Text" class="form-text text-danger"></span>
+                </div>
+                <input asp-for="AddCommentVM.ExpenseId" type="hidden" value="@Model.Expense.ID" />
+                <button id="cancelCommentButton" class="btn btn-primary my-3 d-none">Cancel</button>
+                <button type="submit" id="submitCommentButton" class="btn btn-primary my-3 d-none">Add Comment</button>
+            </form>
+
+            @if (Model.Expense.Status == "New")
+            {
+                <a href="/Expense/Edit/@Model.Expense.ID" class="card-link">Edit</a>
+                <a href="/Expense/Delete/@Model.Expense.ID" class="card-link">Delete Expense</a>
+                <a href="/Expense/UpdateStatus/Review/@Model.Expense.ID" class="card-link">Mark as In Review</a>
+
+            }
+            @if (Model.Expense.Status == "In Review")
+            {
+                <a href="/Expense/UpdateStatus/Approve/@Model.Expense.ID" class="card-link">Approved Expense</a>
+                <a href="/Expense/UpdateStatus/Reject/@Model.Expense.ID" class="card-link">Reject Expense</a>
+            }
+            @if (Model.Expense.Status == "Approved - Pending Payment")
+            {
+                <a href="/Expense/UpdateStatus/Pay/@Model.Expense.ID" class="card-link">Mark as Paid</a>
+            }
             <a asp-controller="Expense" asp-action="Dashboard" class="card-link">Go to Dashboard</a>
         </div>
     </div>

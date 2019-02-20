@@ -9,6 +9,7 @@ namespace ExpenseManagement.Controllers
     {
         public IActionResult Index()
         {
+
             return View();
         }
 

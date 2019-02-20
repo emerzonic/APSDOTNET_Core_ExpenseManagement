@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ExpenseManagement.Data;
 using ExpenseManagement.Models;
 using ExpenseManagement.Service;
@@ -15,32 +16,23 @@ namespace ExpenseManagement.Controllers
     [Authorize]
     public class ExpenseController : Controller
     {
-        private IExpenseService expenseService;
-        private UserManager<ApplicationUser> _manager;
+        private IExpenseService _expenseService;
+        private UserManager<ApplicationUser> _userManager;
+
         public ExpenseController(ExpenseMangtDbContext dbContext,
                 IExpenseService expenseService,
                 UserManager<ApplicationUser> manager
             )
         {
-            this.expenseService = expenseService;
-            this._manager = manager;
+            _expenseService = expenseService;
+            _userManager = manager;
         }
 
 
         [HttpGet]
         public IActionResult Dashboard()
         {
-            List<Expense> expenses = null;
-
-            try
-            {
-                expenses = expenseService.GetAllExpenses();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
+            List<Expense> expenses = _expenseService.GetAllExpenses();
             return View(expenses);
         }
 
@@ -58,7 +50,7 @@ namespace ExpenseManagement.Controllers
 
 
         [HttpPost]
-        public IActionResult Add(AddExpenseVM addExpenseVM)
+        public async Task <IActionResult> Add(AddExpenseVM addExpenseVM)
         {
             if (!ModelState.IsValid)
             {
@@ -67,9 +59,8 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                //Console.Write(this.User);
-                //string userId =  User.Claims.Single(c => c.Equals("Id"));
-                expenseService.AddExpense(addExpenseVM);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                _expenseService.AddExpense(addExpenseVM, user);
             }
             catch (Exception ex)
             {
@@ -91,14 +82,20 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                expense = expenseService.GetOneExpense(id);
+                expense = _expenseService.GetOneExpense(id);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return Redirect("/Expense/Dashboard");
             }
+            var expenseAndCommentVM = new ExpenseAndCommentVM
+            {
+                Expense = expense,
+                AddCommentVM = new AddCommentVM()
+            };
 
-            return View(expense);
+            return View(expenseAndCommentVM);
         }
 
 
@@ -112,7 +109,7 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                Expense expense = expenseService.GetOneExpense(id);
+                Expense expense = _expenseService.GetOneExpense(id);
                 updateExpense = new UpdateExpenseVM
                 {
                     Description = expense.Description,
@@ -126,6 +123,7 @@ namespace ExpenseManagement.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return Redirect("/Expense/Dashboard");
             }
 
             return View(updateExpense);
@@ -142,7 +140,7 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                expenseService.UpdateExpense(updatedExpense);
+                _expenseService.UpdateExpense(updatedExpense);
             }
             catch (Exception ex)
             {
@@ -162,7 +160,7 @@ namespace ExpenseManagement.Controllers
         {
             try
             {
-                expenseService.DeleteExpense(id);
+                _expenseService.DeleteExpense(id);
             }
             catch (Exception ex)
             {
@@ -179,7 +177,7 @@ namespace ExpenseManagement.Controllers
         {
             try
             {
-                expenseService.UpdateExpenseStatus(expenseStatus, expenseId);
+                _expenseService.UpdateExpenseStatus(expenseStatus, expenseId);
             }
             catch (Exception ex)
             {

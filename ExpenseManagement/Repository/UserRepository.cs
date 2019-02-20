@@ -15,18 +15,17 @@ namespace ExpenseManagement.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private ExpenseMangtDbContext context;
+        private ExpenseMangtDbContext _context;
 
         public UserRepository(ExpenseMangtDbContext dbContext)
         {
-            context = dbContext;
+            _context = dbContext;
         }
 
 
         public ApplicationUser GetUserByUsername(string email)
         {
-            return context.Users
-                 //.Include(u => u)
+            return _context.Users
                  .Single(u => u.Email == email);
         }
     }

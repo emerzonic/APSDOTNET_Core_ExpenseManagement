@@ -1,8 +1,11 @@
 ﻿using System;
+using ExpenseManagement.Models;
+using ExpenseManagement.ViewModels;
+
 namespace ExpenseManagement.Service
 {
     public interface ICommentService
     {
-        //TODO add signatures
+        void AddComment(AddCommentVM addCommentVM, ApplicationUser user);
     }
 }

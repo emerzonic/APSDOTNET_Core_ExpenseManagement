@@ -8,8 +8,8 @@ namespace ExpenseManagement.Models
     {
        public Guid ID { get; set; }
        public string Description { get; set; }
-       public Decimal Amount { get; set; }
-       public DateTime Date { get; set; }
+       public double Amount { get; set; }
+       public string Date { get; set; }
        public Guid UserId { get; set; }
        public string Status { get; set; }
        public List<Comment> Comments { get; set; }
@@ -25,8 +25,6 @@ namespace ExpenseManagement.Models
             Comments.Add(newComment);
         }
 
-
-
         internal void UpdateExpenseStatus(string newStatus)
         {
             switch (newStatus)
@@ -38,7 +36,7 @@ namespace ExpenseManagement.Models
                     Status = "Rejected";
                     break;
                 case "Approve":
-                    Status = "Approved - Pending Payment";
+                    Status = "Approved";
                     break;
                 case "Pay":
                     Status = "Paid";

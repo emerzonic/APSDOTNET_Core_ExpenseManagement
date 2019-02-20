@@ -8,27 +8,17 @@ namespace ExpenseManagement.Repository
 {
     public class RoleRepository: IRoleRepository
     {
-        private ExpenseMangtDbContext context;
-        //private RoleManager<Role> manager;
+        private ExpenseMangtDbContext _context;
 
-
-        public RoleRepository(ExpenseMangtDbContext context
-        //RoleManager<Role> manager
-        )
+        public RoleRepository(ExpenseMangtDbContext context)
         {
-            this.context = context;
-            //this.manager = manager;
+            _context = context;
         }
 
-        public void CreateRole(string roleName)
-        {
-            //bool roleExist = manager.RoleExistsAsync(roleName)
-            //manager.CreateAsync(roleName);
-        }
 
         public IdentityRole GetRole(string roleName)
         {
-          return context.Roles.Single(r => r.Name == roleName);
+          return _context.Roles.Single(r => r.Name == roleName);
         }
     }
 }

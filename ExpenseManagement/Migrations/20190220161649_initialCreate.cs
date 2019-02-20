@@ -55,8 +55,8 @@ namespace ExpenseManagement.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
+                    Amount = table.Column<double>(nullable: false),
+                    Date = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     Status = table.Column<string>(nullable: true),
                     Receipt = table.Column<string>(nullable: true)

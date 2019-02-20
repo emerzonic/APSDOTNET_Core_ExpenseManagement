@@ -17,8 +17,8 @@ namespace ExpenseManagement.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService userService;
-        private readonly ExpenseMangtDbContext context;
+        private readonly IUserService _userService;
+        private readonly ExpenseMangtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -31,17 +31,28 @@ namespace ExpenseManagement.Controllers
                             SignInManager<ApplicationUser> signInManager
                             )
         {
-            this.userService = userService;
-            this.context = context;
-            this._userManager = userManager;
-            this._roleManager = roleManager;
-            this._signInManager = signInManager;
+            _userService = userService;
+            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
 
         [HttpGet]
-        public IActionResult Signup()
+        public async Task<IActionResult> Signup()
         {
+            string[] roles = { "Admin", "Manager", "Employee", "Supervisor" };
+            foreach (var roleName in roles)
+            {
+                var userRole = await _roleManager.FindByNameAsync(roleName);
+                if (userRole == null)
+                {
+                    var newRole = new IdentityRole(roleName);
+                    await _roleManager.CreateAsync(newRole);
+                }
+
+            }
             var signupVM = new UserSignupVM();
             return View(signupVM);
         }
@@ -51,6 +62,7 @@ namespace ExpenseManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Signup(UserSignupVM formData)
         {
+
             if (!ModelState.IsValid)
             {
                 return View(formData);
@@ -59,8 +71,9 @@ namespace ExpenseManagement.Controllers
             try
             {
 
-                var user = userService.BuildNewUser(formData);
+                var user = _userService.BuildNewUser(formData);
                 var userResult = await _userManager.CreateAsync(user, formData.Password);
+
                 if (!userResult.Succeeded)
                 {
                     ModelState.AddModelError("Email", userResult.Errors.First().Description);
@@ -68,19 +81,7 @@ namespace ExpenseManagement.Controllers
                 }
 
                 var roleName = RoleNameGenerator.GetRoleNameFromAccessCode(formData.AccessCode);
-                bool roleExistResult = await _roleManager.RoleExistsAsync(roleName);
-                IdentityRole role;
-
-                if (!roleExistResult)
-                {
-                    role = new IdentityRole(roleName);
-                    var roleResult = await _roleManager.CreateAsync(role);
-                }
-                else
-                {
-                    role = await _roleManager.FindByNameAsync(roleName);
-                }
-
+                var role = await _roleManager.FindByNameAsync(roleName);
                 var addUserToRoleResult = await _userManager.AddToRoleAsync(user, role.Name);
                 var signInResult = await _signInManager.PasswordSignInAsync(user, formData.Password, false, false);
 
@@ -94,12 +95,16 @@ namespace ExpenseManagement.Controllers
         }
 
 
+
+
         [HttpGet]
         public IActionResult Login()
         {
             var loginVM = new UserLoginVM();
             return View(loginVM);
         }
+
+
 
 
         [HttpPost]
@@ -112,33 +117,21 @@ namespace ExpenseManagement.Controllers
 
             try
             {
-                ApplicationUser user = userService.GetUser(userLoginVM.Email);
+                var user = _userService.GetUser(userLoginVM.Email);
                 if (user == null)
                 {
                     ModelState.AddModelError("Email", "Invalid username and or password.");
                     return View(userLoginVM);
                 }
 
-                await _userManager.AddClaimAsync(user, new Claim("FirstName", user.FirstName));
-                //var claims = User.Claims;
-                //await user.
-
-                //var identity = new ClaimsIdentity(new[]
-                //{
-                //    new Claim(ClaimTypes.Name, user.FirstName),
-                //    //new Claim(ClaimTypes., user.Id),
-
-                //    }, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                //var principal = new ClaimsPrincipal(identity);
+                await _userManager.AddClaimAsync(user, new Claim("Id", user.Id));
                 var signInResult = await _signInManager.PasswordSignInAsync(user, userLoginVM.Password, false, false);
+
                 if (!signInResult.Succeeded)
                 {
                     ModelState.AddModelError("Email", "Invalid username and/or password.");
                     return View(userLoginVM);
                 }
-
-                //var ssre = await HttpContext.AuthenticateAsync(); //SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             }
             catch (Exception ex)
@@ -157,7 +150,6 @@ namespace ExpenseManagement.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("/");
         }
     }

@@ -3,6 +3,7 @@ using ExpenseManagement.Data;
 using ExpenseManagement.Models;
 using ExpenseManagement.Repository;
 using ExpenseManagement.Service;
+using ExpenseManagement.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -76,6 +77,8 @@ namespace ExpenseManagement
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //.AddCookie();
+            services.AddScoped<RoleManager<IdentityRole>>();
+
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
@@ -85,10 +88,16 @@ namespace ExpenseManagement
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+
+            services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -111,6 +120,8 @@ namespace ExpenseManagement
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //new UserRolesSeeder(serviceProvider.GetService<RoleManager<IdentityRole>>()).Seed();
         }
     }
 }

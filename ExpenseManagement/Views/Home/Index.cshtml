@@ -13,10 +13,26 @@
     <div class="card col-md-4">
         <img src="https://www.freeiconspng.com/uploads/forgot-password-icon-14.png" class="card-img-top" alt="...">
         <div class="card-body">
-            <h5 class="card-title">Get Access</h5>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <h5 class="card-title">Get Access</h5>
+            }
+            else
+            {
+                <h5 class="card-title">Info</h5>
+
+            }
+
             <p class="card-text">Expenses should be submitted within a week of occurance.</p>
-            <a asp-controller="Employee" asp-action="Signup" class="btn btn-primary col-5">Sign Up</a>
-            <a asp-controller="Employee" asp-action="Login" class="btn btn-primary col-5">Sign In</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="User" asp-action="Logout" class="btn btn-primary col-5">Log Out</a>
+            }
+            else
+            {
+                <a asp-controller="User" asp-action="Signup" class="btn btn-primary col-5">Sign Up</a>
+                <a asp-controller="User" asp-action="Login" class="btn btn-primary col-5">Sign In</a>
+            }
         </div>
     </div>
 </div>

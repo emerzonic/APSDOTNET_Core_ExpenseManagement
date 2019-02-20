@@ -8,9 +8,10 @@ namespace ExpenseManagement.ViewModels
         [Required]
         public string Description { get; set; }
         [Required]
-        public Decimal Amount { get; set; }
+        public double Amount { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
+        [Required]
         public string Comments { get; set; }
         [Required]
         public string Receipt { get; set; }
