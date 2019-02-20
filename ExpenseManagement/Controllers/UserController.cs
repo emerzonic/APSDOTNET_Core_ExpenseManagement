@@ -117,10 +117,11 @@ namespace ExpenseManagement.Controllers
 
             try
             {
+                string invalidLoginMessage = "Invalid username and or password.";
                 var user = _userService.GetUser(userLoginVM.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError("Email", "Invalid username and or password.");
+                    ModelState.AddModelError("Email", invalidLoginMessage);
                     return View(userLoginVM);
                 }
 
@@ -129,7 +130,7 @@ namespace ExpenseManagement.Controllers
 
                 if (!signInResult.Succeeded)
                 {
-                    ModelState.AddModelError("Email", "Invalid username and/or password.");
+                    ModelState.AddModelError("Email", invalidLoginMessage);
                     return View(userLoginVM);
                 }
 

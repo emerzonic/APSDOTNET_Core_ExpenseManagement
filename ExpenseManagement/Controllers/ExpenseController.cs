@@ -147,7 +147,7 @@ namespace ExpenseManagement.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return Redirect("/Expense/Detail/" + updatedExpense.ID);
+            return Redirect($"/Expense/Detail/{updatedExpense.ID}");
         }
 
 
@@ -184,7 +184,7 @@ namespace ExpenseManagement.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return Redirect("/Expense/Detail/" + expenseId);
+            return Redirect($"/Expense/Detail/{expenseId}");
         }
     }
 }

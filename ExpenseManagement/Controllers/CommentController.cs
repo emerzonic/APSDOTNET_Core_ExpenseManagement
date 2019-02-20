@@ -29,7 +29,7 @@ namespace ExpenseManagement.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             _commentService.AddComment(addCommentVM, user);
 
-            return Redirect("/Expense/Detail/" + addCommentVM.ExpenseId);
+            return Redirect($"/Expense/Detail/{ addCommentVM.ExpenseId}");
         }
     }
 }
