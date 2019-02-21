@@ -7,7 +7,7 @@
         <img src="https://www.zoho.com/expense/expense-reporting/images/what-is-ze.png" class="card-img-top" alt="...">
         <div class="card-body">
             <h1 class="card-text text-dark display-4">Welcome</h1>
-            <p class="card-text">Expenses should be submitted within a week of occurance.</p>
+            <p class="card-text">Expenses should be submitted within 30 days of transaction date.</p>
         </div>
     </div>
     <div class="card col-md-4">
@@ -16,6 +16,8 @@
             @if (!User.Identity.IsAuthenticated)
             {
                 <h5 class="card-title">Get Access</h5>
+                <p class="card-text">You will have to be logged in to submit expenses.</p>
+
             }
             else
             {
@@ -23,7 +25,6 @@
 
             }
 
-            <p class="card-text">Expenses should be submitted within a week of occurance.</p>
             @if (User.Identity.IsAuthenticated)
             {
                 <a asp-controller="User" asp-action="Logout" class="btn btn-primary col-5">Log Out</a>
@@ -31,7 +32,7 @@
             else
             {
                 <a asp-controller="User" asp-action="Signup" class="btn btn-primary col-5">Sign Up</a>
-                <a asp-controller="User" asp-action="Login" class="btn btn-primary col-5">Sign In</a>
+                <a asp-controller="User" asp-action="Login" class="btn btn-primary col-5">Login</a>
             }
         </div>
     </div>

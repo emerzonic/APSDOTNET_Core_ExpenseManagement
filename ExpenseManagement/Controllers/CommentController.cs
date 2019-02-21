@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using ExpenseManagement.Models;
 using ExpenseManagement.Service;
 using ExpenseManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseManagement.Controllers
 {
+    [Authorize]
     public class CommentController: Controller
     {
         private readonly ICommentService _commentService;

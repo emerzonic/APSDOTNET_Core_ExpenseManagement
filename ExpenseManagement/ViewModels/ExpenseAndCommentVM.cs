@@ -8,6 +8,8 @@ namespace ExpenseManagement.ViewModels
 
         public Expense Expense { get; set; }
         public AddCommentVM AddCommentVM { get; set; }
+        public Guid UserId { get; set; }
+        public bool IsManager { get; set; }
         public ExpenseAndCommentVM(){}
     }
 }

@@ -30,10 +30,22 @@ namespace ExpenseManagement.Controllers
 
 
         [HttpGet]
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
             List<Expense> expenses = _expenseService.GetAllExpenses();
-            return View(expenses);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var isManager = await _userManager.IsInRoleAsync(user, "Manager");
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+
+            var expensesAndUserVM = new ExpensesAndUserVM
+            {
+                Expenses = expenses,
+                UserId = new Guid(user.Id),
+                IsManager = isManager,
+                IsAdmin = isAdmin
+            };
+            return View(expensesAndUserVM);
         }
 
 
@@ -76,7 +88,7 @@ namespace ExpenseManagement.Controllers
 
         [HttpGet]
         [Route("/Expense/Detail/{id}")]
-        public IActionResult Detail(Guid id)
+        public async Task<IActionResult> Detail(Guid id)
         {
             Expense expense = null;
 
@@ -89,10 +101,14 @@ namespace ExpenseManagement.Controllers
                 Console.WriteLine(ex.Message);
                 return Redirect("/Expense/Dashboard");
             }
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var isManager = await _userManager.IsInRoleAsync(user, "Manager");
             var expenseAndCommentVM = new ExpenseAndCommentVM
             {
                 Expense = expense,
-                AddCommentVM = new AddCommentVM()
+                AddCommentVM = new AddCommentVM(),
+                UserId = new Guid(user.Id),
+                IsManager = isManager
             };
 
             return View(expenseAndCommentVM);

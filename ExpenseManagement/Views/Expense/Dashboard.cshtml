@@ -1,4 +1,4 @@
-﻿@model List<ExpenseManagement.Models.Expense>
+﻿@model ExpenseManagement.ViewModels.ExpensesAndUserVM
 
 
 
@@ -9,9 +9,11 @@
     <h1 class="expense-status">New Expenses</h1>
 </div>
 <div class="row">
-        @foreach (var expense in Model)
+    @foreach (var expense in Model.Expenses)
+    {
+        @if (expense.Status == "New")
         {
-            @if (expense.Status == "New")
+            @if ((expense.UserId == Model.UserId) || (Model.IsAdmin || Model.IsManager))
             {
                 <div class="card col-md-3 status-new expense-card shadow-sm">
                     <div class="card-body">
@@ -21,16 +23,19 @@
                         <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                     </div>
                 </div>
+                }
             }
-        }
+    }
 </div>
 <div class="text-center row">
     <h1 class="expense-status">In Review</h1>
 </div>
 <div class="row">
-        @foreach (var expense in Model)
+    @foreach (var expense in Model.Expenses)
+    {
+        @if (expense.Status == "In Review")
         {
-            @if (expense.Status == "In Review")
+            @if ((expense.UserId == Model.UserId) || (Model.IsAdmin || Model.IsManager))
             {
                 <div class="card col-md-3 status-review expense-card">
                     <div class="card-body">
@@ -40,16 +45,19 @@
                         <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                     </div>
                 </div>
+                }
             }
         }
-</div>
+    </div>
 <div class="text-center row">
     <h1 class="expense-status">Approved - Pending Payment</h1>
 </div>
 <div class="row">
-        @foreach (var expense in Model)
+    @foreach (var expense in Model.Expenses)
+    {
+        @if (expense.Status == "Approved")
         {
-            @if (expense.Status == "Approved")
+            @if ((expense.UserId == Model.UserId) || (Model.IsAdmin || Model.IsManager))
             {
                 <div class="card col-md-3 status-approved expense-card">
                     <div class="card-body">
@@ -59,16 +67,19 @@
                         <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                     </div>
                 </div>
+                }
             }
         }
-</div>
+    </div>
 <div class="text-center row">
     <h1 class="expense-status">Paid Expenses</h1>
 </div>
 <div class="row">
-        @foreach (var expense in Model)
+    @foreach (var expense in Model.Expenses)
+    {
+        @if (expense.Status == "Paid")
         {
-            @if (expense.Status == "Paid")
+            @if ((expense.UserId == Model.UserId) || (Model.IsAdmin || Model.IsManager))
             {
                 <div class="card col-md-3 status-paid expense-card">
                     <div class="card-body">
@@ -78,16 +89,19 @@
                         <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                     </div>
                 </div>
+                }
             }
         }
-</div>
+    </div>
 <div class="text-center row">
     <h1 class="expense-status">Rejected Expenses</h1>
 </div>
 <div class="row">
-        @foreach (var expense in Model)
+    @foreach (var expense in Model.Expenses)
+    {
+        @if (expense.Status == "Rejected")
         {
-            @if (expense.Status == "Rejected")
+            @if ((expense.UserId == Model.UserId) || (Model.IsAdmin || Model.IsManager))
             {
                 <div class="card col-md-3 status-rejected expense-card">
                     <div class="card-body">
@@ -97,9 +111,10 @@
                         <a href="/Expense/Detail/@expense.ID" class="card-link">See Detail</a>
                     </div>
                 </div>
+                }
             }
         }
-</div>
+    </div>
 
 
 

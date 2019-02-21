@@ -7,9 +7,6 @@ using ExpenseManagement.Models;
 using ExpenseManagement.Service;
 using ExpenseManagement.Utils;
 using ExpenseManagement.ViewModels;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -125,7 +122,9 @@ namespace ExpenseManagement.Controllers
                     return View(userLoginVM);
                 }
 
+                Console.Write(User);
                 await _userManager.AddClaimAsync(user, new Claim("Id", user.Id));
+
                 var signInResult = await _signInManager.PasswordSignInAsync(user, userLoginVM.Password, false, false);
 
                 if (!signInResult.Succeeded)
@@ -153,5 +152,10 @@ namespace ExpenseManagement.Controllers
             await _signInManager.SignOutAsync();
             return Redirect("/");
         }
+
+
+        public IActionResult ErrorNotLoggedIn() => RedirectToRoute("/");
+        //public IActionResult ErrorNotLoggedIn() => View()
+
     }
 }

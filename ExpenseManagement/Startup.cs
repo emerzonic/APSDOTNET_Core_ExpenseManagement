@@ -68,17 +68,14 @@ namespace ExpenseManagement
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(50);
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LoginPath = "/User/Login";
+                options.AccessDeniedPath = "/User/Login";
                 options.SlidingExpiration = true;
             });
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //.AddCookie();
-            services.AddScoped<RoleManager<IdentityRole>>();
-
+       
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
@@ -121,7 +118,6 @@ namespace ExpenseManagement
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //new UserRolesSeeder(serviceProvider.GetService<RoleManager<IdentityRole>>()).Seed();
         }
     }
 }
