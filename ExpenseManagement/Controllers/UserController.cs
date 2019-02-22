@@ -37,19 +37,9 @@ namespace ExpenseManagement.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Signup()
+        public IActionResult Signup()
         {
-            string[] roles = { "Admin", "Manager", "Employee", "Supervisor" };
-            foreach (var roleName in roles)
-            {
-                var userRole = await _roleManager.FindByNameAsync(roleName);
-                if (userRole == null)
-                {
-                    var newRole = new IdentityRole(roleName);
-                    await _roleManager.CreateAsync(newRole);
-                }
-
-            }
+            new UserRolesSeeder(_roleManager).Seed();
             var signupVM = new UserSignupVM();
             return View(signupVM);
         }
@@ -64,7 +54,6 @@ namespace ExpenseManagement.Controllers
             {
                 return View(formData);
             }
-
             try
             {
 
@@ -76,7 +65,6 @@ namespace ExpenseManagement.Controllers
                     ModelState.AddModelError("Email", userResult.Errors.First().Description);
                     return View(formData);
                 }
-
                 var roleName = RoleNameGenerator.GetRoleNameFromAccessCode(formData.AccessCode);
                 var role = await _roleManager.FindByNameAsync(roleName);
                 var addUserToRoleResult = await _userManager.AddToRoleAsync(user, role.Name);
@@ -121,12 +109,8 @@ namespace ExpenseManagement.Controllers
                     ModelState.AddModelError("Email", invalidLoginMessage);
                     return View(userLoginVM);
                 }
-
-                Console.Write(User);
                 await _userManager.AddClaimAsync(user, new Claim("Id", user.Id));
-
                 var signInResult = await _signInManager.PasswordSignInAsync(user, userLoginVM.Password, false, false);
-
                 if (!signInResult.Succeeded)
                 {
                     ModelState.AddModelError("Email", invalidLoginMessage);
@@ -152,10 +136,5 @@ namespace ExpenseManagement.Controllers
             await _signInManager.SignOutAsync();
             return Redirect("/");
         }
-
-
-        public IActionResult ErrorNotLoggedIn() => RedirectToRoute("/");
-        //public IActionResult ErrorNotLoggedIn() => View()
-
     }
 }

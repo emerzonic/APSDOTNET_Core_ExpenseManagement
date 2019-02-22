@@ -35,10 +35,19 @@ namespace ExpenseManagement.Repository
         public List<Expense> GetAllExpenses()
         {
 
-            List<Expense> expenses = _context.Expenses.OrderBy(e=>e.Date).ToList();
+            List<Expense> expenses = _context.Expenses
+                .OrderBy(e => e.Date)
+                .ToList();
             return expenses;
         }
 
+        public List<Expense> GetExpensesByUserId(Guid userId)
+        {
+            return _context.Expenses
+                .Where(e => e.UserId == userId)
+                .OrderByDescending(e => e.Date)
+                .ToList();
+        }
 
         public Expense GetOneExpense(Guid id)
         {

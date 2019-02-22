@@ -9,6 +9,7 @@ using ExpenseManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ExpenseManagement.Controllers
 {
@@ -32,23 +33,22 @@ namespace ExpenseManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
-            List<Expense> expenses = _expenseService.GetAllExpenses();
+            List<Expense> expenses = new List<Expense>();
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var isManager = await _userManager.IsInRoleAsync(user, "Manager");
             var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-
-            var expensesAndUserVM = new ExpensesAndUserVM
+            if (isManager || isAdmin)
             {
-                Expenses = expenses,
-                UserId = new Guid(user.Id),
-                IsManager = isManager,
-                IsAdmin = isAdmin
-            };
-            return View(expensesAndUserVM);
+                expenses = _expenseService.GetAllExpenses();
+            }
+            else
+            {
+                expenses = _expenseService.GetExpensesByUserId(new Guid(user.Id));
+            }
+
+            return View(expenses);
         }
-
-
 
 
         [HttpGet]
@@ -57,8 +57,6 @@ namespace ExpenseManagement.Controllers
             AddExpenseVM addExpense = new AddExpenseVM();
             return View(addExpense);
         }
-
-
 
 
         [HttpPost]
@@ -82,8 +80,6 @@ namespace ExpenseManagement.Controllers
 
             return Redirect("/Expense/Dashboard");
         }
-
-
 
 
         [HttpGet]

@@ -24,7 +24,7 @@ namespace ExpenseManagement.Service
             {
                 Description = addExpenseVM.Description,
                 Amount = addExpenseVM.Amount,
-                Date = DateTime.Parse(addExpenseVM.Date).ToShortDateString(),
+                Date = DateTime.Parse(addExpenseVM.Date).ToLongDateString(),
                 Comments = new List<Comment>(),
                 Receipt = addExpenseVM.Receipt,
                 UserId = new Guid(user.Id),
@@ -36,7 +36,7 @@ namespace ExpenseManagement.Service
                 {
                     Text = addExpenseVM.Comments,
                     Author = user.FirstName,
-                    Date = DateTime.Now.ToShortDateString(),
+                    Date = DateTime.Now.ToLongDateString(),
                     ID = Guid.NewGuid()
                 };
 
@@ -60,6 +60,10 @@ namespace ExpenseManagement.Service
             return _expenseRepository.GetAllExpenses();
         }
 
+        public List<Expense> GetExpensesByUserId(Guid userId)
+        {
+            return _expenseRepository.GetExpensesByUserId(userId);
+        }
 
         public Expense GetOneExpense(Guid id)
         {

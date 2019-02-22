@@ -23,7 +23,7 @@ namespace ExpenseManagement.Service
             var comment = new Comment
             {
                 Text = addCommentVM.Text,
-                Date = DateTime.Now.ToShortDateString(),
+                Date = DateTime.Now.ToLongDateString(),
                 Author = user.FirstName
             };
 
