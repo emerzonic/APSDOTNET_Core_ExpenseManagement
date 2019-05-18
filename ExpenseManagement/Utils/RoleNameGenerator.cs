@@ -5,7 +5,7 @@ namespace ExpenseManagement.Utils
     {
         public static string GetRoleNameFromAccessCode(string accessCode)
         {
-            string RoleName = "";
+            var RoleName = "";
             switch (accessCode)
             {
                 case "123":
@@ -18,6 +18,7 @@ namespace ExpenseManagement.Utils
                     RoleName = "EMPLOYEE";
                     break;
             }
+
             return RoleName;
         }
     }

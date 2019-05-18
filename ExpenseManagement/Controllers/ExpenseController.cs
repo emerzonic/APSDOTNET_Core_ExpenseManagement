@@ -33,7 +33,7 @@ namespace ExpenseManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
-            List<Expense> expenses = new List<Expense>();
+            var expenses = new List<Expense>();
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var isManager = await _userManager.IsInRoleAsync(user, "Manager");
             var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
@@ -54,15 +54,14 @@ namespace ExpenseManagement.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            AddExpenseVM addExpense = new AddExpenseVM();
-            return View(addExpense);
+            AddExpenseVM addExpenseVM = new AddExpenseVM();
+            return View(addExpenseVM);
         }
 
 
         [HttpPost]
         public async Task <IActionResult> Add(AddExpenseVM addExpenseVM)
-        {
-            if (!ModelState.IsValid)
+        {  if (!ModelState.IsValid)
             {
                 return View(addExpenseVM);
             }

@@ -37,9 +37,20 @@ namespace ExpenseManagement.Controllers
 
 
         [HttpGet]
-        public IActionResult Signup()
+        public async Task<IActionResult> Signup()
         {
-            new UserRolesSeeder(_roleManager).Seed();
+            //new UserRolesSeeder(_roleManager).Seed();
+            string[] roles = { "ADMIN", "MANAGER", "EMPLOYEE", "SUPERVISOR" };
+            foreach (var roleName in roles)
+            {
+                var role =  await _roleManager.RoleExistsAsync(roleName);
+                if (!role)
+                {
+                    IdentityRole newRole = new IdentityRole(roleName);
+                    await _roleManager.CreateAsync(newRole);
+                }
+
+            }
             var signupVM = new UserSignupVM();
             return View(signupVM);
         }
@@ -62,7 +73,9 @@ namespace ExpenseManagement.Controllers
 
                 if (!userResult.Succeeded)
                 {
-                    ModelState.AddModelError("Email", userResult.Errors.First().Description);
+                    var errorMessage = userResult.Errors.First().Description;
+                    var errorKey = errorMessage.Contains("Passwords") ? "Password" : "Email";
+                    ModelState.AddModelError(errorKey, errorMessage);
                     return View(formData);
                 }
                 var roleName = RoleNameGenerator.GetRoleNameFromAccessCode(formData.AccessCode);

@@ -14,13 +14,13 @@ namespace ExpenseManagement.Utils
 
         public async void Seed()
         {
-            string[] roles = { "Admin", "Manager", "Employee", "Supervisor" };
+            string[] roles = { "ADMIN", "MANAGER", "EMPLOYEE", "SUPERVISOR" };
             foreach (var roleName in roles)
             {
-                var userRole = await _roleManager.FindByNameAsync(roleName);
-                if (userRole == null)
+                var role = await _roleManager.FindByNameAsync(roleName);
+                if (role == null)
                 {
-                    var newRole = new IdentityRole(roleName);
+                    IdentityRole newRole = new IdentityRole(roleName);
                     await _roleManager.CreateAsync(newRole);
                 }
 
