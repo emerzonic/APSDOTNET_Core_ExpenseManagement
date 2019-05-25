@@ -20,10 +20,7 @@ namespace ExpenseManagement.Controllers
         private IExpenseService _expenseService;
         private UserManager<ApplicationUser> _userManager;
 
-        public ExpenseController(ExpenseMangtDbContext dbContext,
-                IExpenseService expenseService,
-                UserManager<ApplicationUser> manager
-            )
+        public ExpenseController(ExpenseMangtDbContext dbContext, IExpenseService expenseService, UserManager<ApplicationUser> manager)
         {
             _expenseService = expenseService;
             _userManager = manager;
